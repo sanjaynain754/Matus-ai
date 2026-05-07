@@ -1,0 +1,9 @@
+// Matus Self-Update and Upgrade Test
+
+print("Starting self-update check...")
+update_result = self_update()
+print(update_result)
+
+print("\nStarting self-upgrade process...")
+upgrade_result = self_upgrade()
+print(upgrade_result)
