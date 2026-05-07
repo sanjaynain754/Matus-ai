@@ -1,0 +1,20 @@
+// Upgrade test for Matus v0.2
+
+print("Testing for loops...")
+for i in range(3):
+    print("Loop iteration:")
+    print(i)
+
+print("\nTesting custom functions...")
+func greet(name):
+    print("Hello from custom function,")
+    print(name)
+
+greet("Master Hacker")
+
+print("\nTesting nested structures...")
+for i in range(2):
+    if i == 0:
+        print("Zero")
+    else:
+        print("One")

@@ -10,9 +10,9 @@ class MatusMythos:
         
         try:
             response = self.client.chat.completions.create(
-                model="gemini-2.5-flash", # Using a suitable LLM for analysis
+                model="gpt-4.1-mini", # Using a more advanced model for security analysis
                 messages=[
-                    {"role": "system", "content": "You are a security expert specialized in identifying vulnerabilities in code."},
+                    {"role": "system", "content": "You are a world-class security researcher specialized in zero-day discovery."},
                     {"role": "user", "content": prompt}
                 ]
             )

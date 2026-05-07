@@ -28,13 +28,30 @@ class MatusHacking:
     def run_command(command):
         try:
             result = subprocess.check_output(command, shell=True).decode()
-            print(result)
             return result
         except Exception as e:
-            print(str(e))
-            return str(e)
+            return f"Error: {str(e)}"
+
+    @staticmethod
+    def read_file(path):
+        try:
+            with open(path, 'r') as f:
+                return f.read()
+        except Exception as e:
+            return f"Error: {str(e)}"
+
+    @staticmethod
+    def write_file(path, content):
+        try:
+            with open(path, 'w') as f:
+                f.write(content)
+                return "Success"
+        except Exception as e:
+            return f"Error: {str(e)}"
 
 def inject_hacking_tools(interpreter):
     interpreter.variables['scan_ports'] = MatusHacking.scan_ports
     interpreter.variables['get_ip'] = MatusHacking.get_ip
     interpreter.variables['run_cmd'] = MatusHacking.run_command
+    interpreter.variables['read_file'] = MatusHacking.read_file
+    interpreter.variables['write_file'] = MatusHacking.write_file

@@ -6,11 +6,15 @@ from matus_mythos import inject_mythos_tools
 class MatusInterpreter:
     def __init__(self):
         self.variables = {}
+        self.custom_functions = {}
         inject_hacking_tools(self)
         inject_mythos_tools(self)
 
     def execute(self, code):
         lines = code.split('\n')
+        self.execute_block(lines)
+
+    def execute_block(self, lines):
         i = 0
         while i < len(lines):
             line = lines[i].strip()
@@ -18,23 +22,60 @@ class MatusInterpreter:
                 i += 1
                 continue
             
+            # Function Definition
+            if line.startswith('func '):
+                func_header = line[5:-1].strip()
+                func_name = func_header.split('(')[0].strip()
+                params = [p.strip() for p in func_header.split('(')[1].split(')')[0].split(',') if p.strip()]
+                
+                func_body = []
+                i += 1
+                while i < len(lines) and (lines[i].startswith('    ') or lines[i].strip() == ''):
+                    func_body.append(lines[i][4:] if lines[i].startswith('    ') else lines[i])
+                    i += 1
+                self.custom_functions[func_name] = {'params': params, 'body': func_body}
+                continue
+
+            # For Loop
+            if line.startswith('for '):
+                parts = line[4:-1].split(' in ')
+                var_name = parts[0].strip()
+                iterable_expr = parts[1].strip()
+                iterable = self.evaluate_expr(iterable_expr)
+                
+                loop_body = []
+                i += 1
+                while i < len(lines) and (lines[i].startswith('    ') or lines[i].strip() == ''):
+                    loop_body.append(lines[i][4:] if lines[i].startswith('    ') else lines[i])
+                    i += 1
+                
+                for val in iterable:
+                    self.variables[var_name] = val
+                    self.execute_block(loop_body)
+                continue
+
+            # If Statement
             if line.startswith('if '):
                 condition_part = line[3:-1].strip()
-                condition = eval(condition_part, {}, self.variables)
-                if not condition:
-                    i += 1
-                    while i < len(lines) and not (lines[i].startswith('else:') or lines[i].strip() == ''):
-                        i += 1
-                    if i < len(lines) and lines[i].startswith('else:'):
-                        i += 1
-                        continue
-                else:
-                    i += 1
-                    continue
-            elif line.startswith('else:'):
+                condition = self.evaluate_expr(condition_part)
+                
+                if_body = []
                 i += 1
-                while i < len(lines) and not (lines[i].strip() == ''):
+                while i < len(lines) and (lines[i].startswith('    ') or lines[i].strip() == ''):
+                    if_body.append(lines[i][4:] if lines[i].startswith('    ') else lines[i])
                     i += 1
+                
+                else_body = []
+                if i < len(lines) and lines[i].strip() == 'else:':
+                    i += 1
+                    while i < len(lines) and (lines[i].startswith('    ') or lines[i].strip() == ''):
+                        else_body.append(lines[i][4:] if lines[i].startswith('    ') else lines[i])
+                        i += 1
+                
+                if condition:
+                    self.execute_block(if_body)
+                else:
+                    self.execute_block(else_body)
                 continue
 
             self.evaluate(line)
@@ -53,11 +94,13 @@ class MatusInterpreter:
 
     def evaluate_expr(self, expr):
         expr = expr.strip()
+        if not expr: return None
         if expr.startswith('"') and expr.endswith('"'):
             return expr[1:-1]
         if expr.isdigit():
             return int(expr)
         
+        # Function Call
         if '(' in expr and expr.endswith(')'):
             func_name = expr.split('(', 1)[0].strip()
             args_str = expr[expr.find('(')+1:-1].strip()
@@ -83,10 +126,21 @@ class MatusInterpreter:
                     args.append(self.evaluate_expr(p))
             
             if func_name == 'print':
-                for a in args:
-                    print(a)
+                print(*(args))
                 return None
             
+            if func_name == 'range':
+                return list(range(*args))
+
+            if func_name in self.custom_functions:
+                func = self.custom_functions[func_name]
+                old_vars = self.variables.copy()
+                for param, arg in zip(func['params'], args):
+                    self.variables[param] = arg
+                self.execute_block(func['body'])
+                # Very basic: return last evaluated or None (proper return not implemented yet)
+                return None
+
             if func_name in self.variables and callable(self.variables[func_name]):
                 return self.variables[func_name](*args)
         
@@ -108,7 +162,7 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         interpreter.run_file(sys.argv[1])
     else:
-        print("Matus Interpreter v0.1")
+        print("Matus Interpreter v0.2")
         while True:
             try:
                 line = input("matus > ")
