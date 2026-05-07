@@ -1,11 +1,13 @@
 import sys
 import re
 from matus_hacking import inject_hacking_tools
+from matus_mythos import inject_mythos_tools
 
 class MatusInterpreter:
     def __init__(self):
         self.variables = {}
         inject_hacking_tools(self)
+        inject_mythos_tools(self)
 
     def execute(self, code):
         lines = code.split('\n')

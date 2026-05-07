@@ -1,0 +1,18 @@
+// Mythos AI module test
+
+print("Analyzing code for vulnerabilities...")
+code_to_analyze = """
+def login(username, password):
+    query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}';"
+    # Execute query
+    return query
+"""
+vulnerability_report = mythos_analyze_code(code_to_analyze)
+print("Vulnerability Report:")
+print(vulnerability_report)
+
+print("\nSuggesting exploit path...")
+vuln_desc = "SQL Injection vulnerability in login function due to unsanitized user input."
+exploit_suggestion = mythos_suggest_exploit(vuln_desc)
+print("Exploit Suggestion:")
+print(exploit_suggestion)
