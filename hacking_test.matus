@@ -1,0 +1,11 @@
+// Hacking test in Matus
+print("Resolving google.com...")
+ip = get_ip("google.com")
+print("IP address:")
+print(ip)
+
+print("Scanning local ports...")
+scan_ports("127.0.0.1", [80, 443, 22, 8080])
+
+print("System info:")
+run_cmd("uname -a")

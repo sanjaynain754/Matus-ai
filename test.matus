@@ -1,0 +1,13 @@
+// This is a test Matus script
+print("Hello from Matus!")
+x = 10
+y = 20
+z = x + y
+print(z)
+name = "Manus"
+print(name)
+
+if x < 20:
+    print("x is small")
+else:
+    print("x is large")
