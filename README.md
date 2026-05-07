@@ -5,6 +5,7 @@ Matus is a versatile, Python-inspired programming language designed for general-
 ## Features
 - **Simple Syntax:** Indentation-based, easy to read and write.
 - **Hacking Modules:** Built-in support for network scanning, IP resolution, and system commands.
+- **Mythos AI Module:** AI-powered vulnerability analysis and exploit path suggestion.
 - **Cross-Platform:** Runs on any system with Python, and includes an Android wrapper.
 
 ## Installation
