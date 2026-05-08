@@ -1,0 +1,23 @@
+// Matus Admin Module Test
+
+print("System Information:")
+info = admin_sys_info()
+print(info)
+
+print("\nChecking Privileges:")
+is_root = admin_is_root()
+if is_root:
+    print("Running as Admin/Root")
+else:
+    print("Running as Regular User")
+
+print("\nDisk Usage:")
+usage = admin_disk_usage()
+print(usage)
+
+print("\nListing first few lines of processes:")
+procs = admin_list_procs()
+// Just print the first 200 characters to keep output clean
+print("Process list preview...")
+// Note: Matus doesn't have string slicing yet, so we just print a message
+print("Use admin_list_procs() to see all running tasks.")

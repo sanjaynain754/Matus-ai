@@ -3,6 +3,7 @@ import re
 from matus_hacking import inject_hacking_tools
 from matus_mythos import inject_mythos_tools
 from matus_updater import inject_updater_tools
+from matus_admin import inject_admin_tools
 
 class MatusInterpreter:
     def __init__(self):
@@ -11,6 +12,7 @@ class MatusInterpreter:
         inject_hacking_tools(self)
         inject_mythos_tools(self)
         inject_updater_tools(self)
+        inject_admin_tools(self)
 
     def execute(self, code):
         lines = code.split('\n')
