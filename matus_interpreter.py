@@ -5,6 +5,7 @@ from matus_mythos import inject_mythos_tools
 from matus_updater import inject_updater_tools
 from matus_admin import inject_admin_tools
 from matus_auto import inject_auto_tools
+from matus_web import inject_web_tools
 
 class MatusInterpreter:
     def __init__(self):
@@ -15,6 +16,7 @@ class MatusInterpreter:
         inject_updater_tools(self)
         inject_admin_tools(self)
         inject_auto_tools(self)
+        inject_web_tools(self)
 
     def execute(self, code):
         lines = code.split('\n')
@@ -168,7 +170,10 @@ class MatusInterpreter:
 if __name__ == "__main__":
     interpreter = MatusInterpreter()
     if len(sys.argv) > 1:
-        interpreter.run_file(sys.argv[1])
+        if sys.argv[1] == "-c" and len(sys.argv) > 2:
+            interpreter.execute(sys.argv[2])
+        else:
+            interpreter.run_file(sys.argv[1])
     else:
         print("Matus Interpreter v0.2")
         while True:

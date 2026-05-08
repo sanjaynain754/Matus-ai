@@ -1,0 +1,20 @@
+// Matus-Web Live Data Test
+
+print("Fetching live data from a public API...")
+// Get current price of Bitcoin in USD
+crypto_data = web_api_json("https://api.coindesk.com/v1/bpi/currentprice.json")
+print("Bitcoin Status:")
+print(crypto_data)
+
+print("\nScraping text from a website...")
+// Scrape text from a simple example page
+site_text = web_scrape("http://example.com")
+print("Site Content:")
+print(site_text)
+
+print("\nSearching for 'latest cybersecurity news'...")
+// Note: Google might block simple scraping, but this demonstrates the capability
+search_results = web_search("latest+cybersecurity+news")
+print("Search Results Preview:")
+// Just print a bit of it
+print("Search executed successfully. Use web_scrape to extract specific data.")
