@@ -1,0 +1,1 @@
+{'OS': 'Linux', 'OS Version': '#1 SMP PREEMPT_DYNAMIC Tue Mar 25 09:02:46 UTC 2025', 'Architecture': 'x86_64', 'Processor': 'x86_64', 'Python Version': '3.11.0rc1', 'Home Directory': '/home/ubuntu', 'Current Directory': '/home/ubuntu/Matus-ai'}

@@ -1,0 +1,10 @@
+// Matus-Auto Autonomous Task Test
+
+print("Requesting autonomous task...")
+// Task: Create a file named 'auto_success.txt' with the current OS name inside it
+auto_task("Create a file named 'auto_success.txt' and write the current OS name into it using admin_sys_info()")
+
+print("\nVerifying the result...")
+content = read_file("auto_success.txt")
+print("File content:")
+print(content)

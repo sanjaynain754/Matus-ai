@@ -44,7 +44,7 @@ class MatusHacking:
     def write_file(path, content):
         try:
             with open(path, 'w') as f:
-                f.write(content)
+                f.write(str(content))
                 return "Success"
         except Exception as e:
             return f"Error: {str(e)}"
