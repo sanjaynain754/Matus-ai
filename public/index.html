@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MATUS ULTIMATE - The All-Powerful Language</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #00ff00;
+            padding-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 3em;
+            text-shadow: 0 0 20px #00ff00;
+            margin-bottom: 10px;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 20px #00ff00; }
+            50% { text-shadow: 0 0 40px #00ff00, 0 0 60px #00ff00; }
+        }
+
+        .subtitle {
+            color: #00aa00;
+            font-size: 1.2em;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .panel {
+            background: rgba(0, 20, 40, 0.8);
+            border: 2px solid #00ff00;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+        }
+
+        .panel h2 {
+            color: #00ff00;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            text-shadow: 0 0 10px #00ff00;
+        }
+
+        textarea {
+            width: 100%;
+            height: 300px;
+            background: #000;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            resize: vertical;
+            border-radius: 3px;
+        }
+
+        textarea:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+
+        #output {
+            background: #000;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 15px;
+            height: 300px;
+            overflow-y: auto;
+            border-radius: 3px;
+            font-size: 0.9em;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px 20px;
+            background: #00ff00;
+            color: #000;
+            border: none;
+            border-radius: 3px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s;
+            text-transform: uppercase;
+        }
+
+        button:hover {
+            background: #00aa00;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .loading {
+            display: none;
+            color: #00ff00;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .example-card {
+            background: rgba(0, 20, 40, 0.8);
+            border: 1px solid #00aa00;
+            padding: 15px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .example-card:hover {
+            border-color: #00ff00;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .example-card h3 {
+            color: #00ff00;
+            margin-bottom: 10px;
+        }
+
+        .example-card code {
+            color: #00aa00;
+            font-size: 0.85em;
+            display: block;
+            overflow-x: auto;
+        }
+
+        .info-panel {
+            background: rgba(0, 20, 40, 0.8);
+            border: 2px solid #00ff00;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 30px;
+        }
+
+        .info-panel h3 {
+            color: #00ff00;
+            margin-bottom: 15px;
+        }
+
+        .features-list {
+            list-style: none;
+            columns: 2;
+        }
+
+        .features-list li {
+            color: #00aa00;
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .features-list li:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #00ff00;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .examples {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .status {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background: #00ff00;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚡ MATUS ULTIMATE ⚡</h1>
+            <p class="subtitle">The All-Powerful Programming Language</p>
+            <p style="margin-top: 10px; color: #00aa00;">
+                <span class="status"></span>System Online - Ready for Execution
+            </p>
+        </header>
+
+        <div class="main-content">
+            <div class="panel">
+                <h2>Code Editor</h2>
+                <textarea id="codeInput" placeholder="Enter MATUS code here...
+Examples:
+py: print('Hello from Python')
+bash: whoami
+js: console.log('JavaScript')
+cpp: #include &lt;iostream&gt;
+sql: SELECT * FROM table;
+sys: ls -la
+read: /path/to/file
+write: /tmp/file.txt &lt;&lt; content"></textarea>
+                <div class="button-group">
+                    <button onclick="executeCode()">▶ Execute</button>
+                    <button onclick="clearCode()">🗑 Clear</button>
+                </div>
+                <div class="loading" id="loading">
+                    ⏳ Executing...
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>Output Terminal</h2>
+                <div id="output">Ready for execution...</div>
+                <div class="button-group">
+                    <button onclick="clearOutput()">Clear Output</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="examples">
+            <div class="example-card" onclick="loadExample(0)">
+                <h3>Python Execution</h3>
+                <code>py: print("Hello from Python")</code>
+            </div>
+            <div class="example-card" onclick="loadExample(1)">
+                <h3>Bash Commands</h3>
+                <code>bash: whoami</code>
+            </div>
+            <div class="example-card" onclick="loadExample(2)">
+                <h3>JavaScript</h3>
+                <code>js: console.log("Node.js")</code>
+            </div>
+            <div class="example-card" onclick="loadExample(3)">
+                <h3>System Info</h3>
+                <code>sys_enum:</code>
+            </div>
+            <div class="example-card" onclick="loadExample(4)">
+                <h3>File Operations</h3>
+                <code>read: /etc/hostname</code>
+            </div>
+            <div class="example-card" onclick="loadExample(5)">
+                <h3>Network Scan</h3>
+                <code>port_scan: localhost</code>
+            </div>
+        </div>
+
+        <div class="info-panel">
+            <h3>✨ Features</h3>
+            <ul class="features-list">
+                <li>Multi-Language Support (Python, C++, JS, Bash)</li>
+                <li>Direct System Access</li>
+                <li>File Operations (Read/Write/Delete)</li>
+                <li>Network Scanning & Analysis</li>
+                <li>SQL Database Operations</li>
+                <li>Process Management</li>
+                <li>Memory Access</li>
+                <li>Vulnerability Scanning</li>
+                <li>Privilege Escalation Check</li>
+                <li>System Enumeration</li>
+                <li>Autonomous Task Execution</li>
+                <li>AI Security Analysis</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const examples = [
+            'py: print("Hello from Python")\npy: result = 2**10\npy: print(f"2^10 = {result}")',
+            'bash: echo "System Information:"\nbash: whoami\nbash: date',
+            'js: console.log("Hello from Node.js")\njs: console.log([1,2,3,4,5].map(x => x*2))',
+            'sys_enum:',
+            'read: /etc/hostname',
+            'port_scan: localhost'
+        ];
+
+        function loadExample(index) {
+            document.getElementById('codeInput').value = examples[index];
+        }
+
+        async function executeCode() {
+            const code = document.getElementById('codeInput').value;
+            const output = document.getElementById('output');
+            const loading = document.getElementById('loading');
+
+            if (!code.trim()) {
+                output.textContent = 'Error: No code provided';
+                return;
+            }
+
+            loading.classList.add('active');
+            output.textContent = 'Executing...';
+
+            try {
+                const response = await fetch('/api/execute', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ code, type: 'matus' })
+                });
+
+                const result = await response.json();
+                loading.classList.remove('active');
+
+                if (result.success) {
+                    output.textContent = result.output || 'Execution completed successfully';
+                } else {
+                    output.textContent = `Error: ${result.error}`;
+                }
+            } catch (error) {
+                loading.classList.remove('active');
+                output.textContent = `Error: ${error.message}`;
+            }
+        }
+
+        function clearCode() {
+            document.getElementById('codeInput').value = '';
+            document.getElementById('codeInput').focus();
+        }
+
+        function clearOutput() {
+            document.getElementById('output').textContent = 'Output cleared';
+        }
+
+        // Allow Ctrl+Enter to execute
+        document.getElementById('codeInput').addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'Enter') {
+                executeCode();
+            }
+        });
+    </script>
+</body>
+</html>

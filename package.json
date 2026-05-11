@@ -1,0 +1,25 @@
+{
+  "name": "matus-ultimate",
+  "version": "1.0.0",
+  "description": "MATUS ULTIMATE - The All-Powerful Programming Language",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "matus",
+    "programming-language",
+    "hacking",
+    "security"
+  ],
+  "author": "sanjaynain754",
+  "license": "MIT",
+  "engines": {
+    "node": "18.x"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
