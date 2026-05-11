@@ -1,0 +1,55 @@
+// MATUS ULTIMATE - Comprehensive Test Suite
+
+// Test 1: Python Execution
+print: ===== Python Execution =====
+py: print("Hello from Python with full power!")
+py: result = 2**10; print(f"2^10 = {result}")
+
+// Test 2: Bash Commands
+print: ===== Bash Commands =====
+bash: echo "System Information:"
+bash: uname -a
+bash: whoami
+
+// Test 3: File Operations
+print: ===== File Operations =====
+write: /tmp/matus_test.txt << This is a test file created by MATUS ULTIMATE
+read: /tmp/matus_test.txt
+
+// Test 4: JavaScript Execution
+print: ===== JavaScript Execution =====
+js: console.log("JavaScript execution with Node.js");
+js: console.log("Array operations: " + [1,2,3,4,5].map(x => x*2).join(","));
+
+// Test 5: System Information
+print: ===== System Information =====
+sys: df -h
+sys: ps aux | head -5
+
+// Test 6: Network Capabilities
+print: ===== Network Scan =====
+scan: localhost
+
+// Test 7: Variable Assignment
+print: ===== Variable Assignment =====
+x = 42
+y = "MATUS ULTIMATE"
+print: x = {x}
+print: y = {y}
+
+// Test 8: Direct Command Execution
+print: ===== Direct Commands =====
+ls -la /tmp | head -10
+whoami
+date
+
+// Test 9: SQL Database
+print: ===== SQL Operations =====
+sql: CREATE TABLE IF NOT EXISTS matus_test (id INTEGER PRIMARY KEY, name TEXT);
+sql: INSERT INTO matus_test VALUES (1, 'MATUS');
+sql: SELECT * FROM matus_test;
+
+// Test 10: Memory and System Access
+print: ===== Admin Capabilities =====
+print: All restrictions removed - Full system access enabled
+print: MATUS ULTIMATE - Ready for any task
