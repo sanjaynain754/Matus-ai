@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MATUS ULTIMATE - Advanced Console</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background: rgba(0, 10, 20, 0.95);
+            border-right: 2px solid #00ff00;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            color: #00ff00;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            text-shadow: 0 0 10px #00ff00;
+        }
+
+        .tool-group {
+            margin-bottom: 20px;
+        }
+
+        .tool-group h3 {
+            color: #00aa00;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            border-bottom: 1px solid #00aa00;
+            padding-bottom: 5px;
+        }
+
+        .tool-btn {
+            display: block;
+            width: 100%;
+            padding: 8px 12px;
+            margin-bottom: 5px;
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid #00aa00;
+            color: #00aa00;
+            cursor: pointer;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            transition: all 0.3s;
+            text-align: left;
+        }
+
+        .tool-btn:hover {
+            background: rgba(0, 255, 0, 0.2);
+            border-color: #00ff00;
+            color: #00ff00;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+        }
+
+        .tool-btn.active {
+            background: #00ff00;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .main-content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #00ff00;
+            padding-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 2em;
+            text-shadow: 0 0 20px #00ff00;
+            margin-bottom: 5px;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 20px #00ff00; }
+            50% { text-shadow: 0 0 40px #00ff00, 0 0 60px #00ff00; }
+        }
+
+        .tool-panel {
+            background: rgba(0, 20, 40, 0.8);
+            border: 2px solid #00ff00;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+            flex: 1;
+            display: none;
+        }
+
+        .tool-panel.active {
+            display: block;
+        }
+
+        .tool-panel h2 {
+            color: #00ff00;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            text-shadow: 0 0 10px #00ff00;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            color: #00aa00;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            background: #000;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+            border-color: #00ff00;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px 20px;
+            background: #00ff00;
+            color: #000;
+            border: none;
+            border-radius: 3px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s;
+            text-transform: uppercase;
+        }
+
+        button:hover {
+            background: #00aa00;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .output-panel {
+            background: #000;
+            border: 1px solid #00ff00;
+            padding: 15px;
+            border-radius: 3px;
+            height: 400px;
+            overflow-y: auto;
+            font-size: 0.85em;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin-top: 15px;
+        }
+
+        .loading {
+            display: none;
+            color: #00ff00;
+            text-align: center;
+            margin-top: 10px;
+            animation: pulse 1s infinite;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .result-item {
+            background: rgba(0, 255, 0, 0.05);
+            border-left: 3px solid #00ff00;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 3px;
+        }
+
+        .result-item.success {
+            border-left-color: #00ff00;
+        }
+
+        .result-item.warning {
+            border-left-color: #ffaa00;
+            color: #ffaa00;
+        }
+
+        .result-item.error {
+            border-left-color: #ff0000;
+            color: #ff0000;
+        }
+
+        .status-bar {
+            background: rgba(0, 20, 40, 0.8);
+            border-top: 2px solid #00ff00;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background: #00ff00;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h2>⚙️ Tools</h2>
+
+            <div class="tool-group">
+                <h3>Network</h3>
+                <button class="tool-btn active" onclick="switchTool('port-scan')">Port Scanner</button>
+                <button class="tool-btn" onclick="switchTool('dns-enum')">DNS Enumeration</button>
+                <button class="tool-btn" onclick="switchTool('vuln-scan')">Vulnerability Scan</button>
+            </div>
+
+            <div class="tool-group">
+                <h3>Web Security</h3>
+                <button class="tool-btn" onclick="switchTool('sql-injection')">SQL Injection Test</button>
+                <button class="tool-btn" onclick="switchTool('xss-detection')">XSS Detection</button>
+            </div>
+
+            <div class="tool-group">
+                <h3>System</h3>
+                <button class="tool-btn" onclick="switchTool('sys-enum')">System Enumeration</button>
+                <button class="tool-btn" onclick="switchTool('priv-esc')">Privilege Escalation</button>
+            </div>
+
+            <div class="tool-group">
+                <h3>Utilities</h3>
+                <button class="tool-btn" onclick="switchTool('password-check')">Password Strength</button>
+                <button class="tool-btn" onclick="switchTool('reverse-shell')">Reverse Shell Gen</button>
+                <button class="tool-btn" onclick="switchTool('code-editor')">Code Editor</button>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <header>
+                <h1>⚡ MATUS ADVANCED CONSOLE ⚡</h1>
+                <p style="color: #00aa00;">Professional Security Testing & Automation Platform</p>
+            </header>
+
+            <!-- Port Scanner -->
+            <div id="port-scan" class="tool-panel active">
+                <h2>🔍 Port Scanner</h2>
+                <div class="input-group">
+                    <label>Target Host/IP:</label>
+                    <input type="text" id="ps-target" placeholder="example.com or 192.168.1.1">
+                </div>
+                <div class="input-group">
+                    <label>Port Range:</label>
+                    <input type="text" id="ps-ports" placeholder="1-1000" value="1-1000">
+                </div>
+                <div class="button-group">
+                    <button onclick="runPortScan()">▶ Scan</button>
+                </div>
+                <div id="ps-output" class="output-panel"></div>
+            </div>
+
+            <!-- DNS Enumeration -->
+            <div id="dns-enum" class="tool-panel">
+                <h2>🌐 DNS Enumeration</h2>
+                <div class="input-group">
+                    <label>Domain:</label>
+                    <input type="text" id="dns-domain" placeholder="example.com">
+                </div>
+                <div class="button-group">
+                    <button onclick="runDNSEnum()">▶ Enumerate</button>
+                </div>
+                <div id="dns-output" class="output-panel"></div>
+            </div>
+
+            <!-- Vulnerability Scan -->
+            <div id="vuln-scan" class="tool-panel">
+                <h2>🛡️ Vulnerability Scanner</h2>
+                <div class="input-group">
+                    <label>Target URL:</label>
+                    <input type="text" id="vs-url" placeholder="https://example.com">
+                </div>
+                <div class="button-group">
+                    <button onclick="runVulnScan()">▶ Scan</button>
+                </div>
+                <div id="vs-output" class="output-panel"></div>
+            </div>
+
+            <!-- SQL Injection -->
+            <div id="sql-injection" class="tool-panel">
+                <h2>💉 SQL Injection Tester</h2>
+                <div class="input-group">
+                    <label>Target URL:</label>
+                    <input type="text" id="sql-url" placeholder="https://example.com/search">
+                </div>
+                <div class="input-group">
+                    <label>Parameter Name:</label>
+                    <input type="text" id="sql-param" placeholder="q" value="q">
+                </div>
+                <div class="button-group">
+                    <button onclick="runSQLInjection()">▶ Test</button>
+                </div>
+                <div id="sql-output" class="output-panel"></div>
+            </div>
+
+            <!-- XSS Detection -->
+            <div id="xss-detection" class="tool-panel">
+                <h2>⚠️ XSS Detection</h2>
+                <div class="input-group">
+                    <label>Target URL:</label>
+                    <input type="text" id="xss-url" placeholder="https://example.com/search">
+                </div>
+                <div class="button-group">
+                    <button onclick="runXSSDetection()">▶ Test</button>
+                </div>
+                <div id="xss-output" class="output-panel"></div>
+            </div>
+
+            <!-- System Enumeration -->
+            <div id="sys-enum" class="tool-panel">
+                <h2>🖥️ System Enumeration</h2>
+                <div class="button-group">
+                    <button onclick="runSysEnum()">▶ Enumerate</button>
+                </div>
+                <div id="sys-output" class="output-panel"></div>
+            </div>
+
+            <!-- Privilege Escalation -->
+            <div id="priv-esc" class="tool-panel">
+                <h2>🔓 Privilege Escalation Check</h2>
+                <div class="button-group">
+                    <button onclick="runPrivEsc()">▶ Check</button>
+                </div>
+                <div id="priv-output" class="output-panel"></div>
+            </div>
+
+            <!-- Password Strength -->
+            <div id="password-check" class="tool-panel">
+                <h2>🔐 Password Strength Checker</h2>
+                <div class="input-group">
+                    <label>Password:</label>
+                    <input type="text" id="pass-input" placeholder="Enter password to check">
+                </div>
+                <div class="button-group">
+                    <button onclick="runPasswordCheck()">▶ Check</button>
+                </div>
+                <div id="pass-output" class="output-panel"></div>
+            </div>
+
+            <!-- Reverse Shell Generator -->
+            <div id="reverse-shell" class="tool-panel">
+                <h2>🔄 Reverse Shell Generator</h2>
+                <div class="input-group">
+                    <label>Attacker IP:</label>
+                    <input type="text" id="rs-ip" placeholder="192.168.1.100">
+                </div>
+                <div class="input-group">
+                    <label>Attacker Port:</label>
+                    <input type="number" id="rs-port" placeholder="4444" value="4444">
+                </div>
+                <div class="input-group">
+                    <label>Shell Type:</label>
+                    <select id="rs-type">
+                        <option value="bash">Bash</option>
+                        <option value="python">Python</option>
+                        <option value="nc">Netcat</option>
+                        <option value="perl">Perl</option>
+                    </select>
+                </div>
+                <div class="button-group">
+                    <button onclick="runReverseShell()">▶ Generate</button>
+                </div>
+                <div id="rs-output" class="output-panel"></div>
+            </div>
+
+            <!-- Code Editor -->
+            <div id="code-editor" class="tool-panel">
+                <h2>💻 Code Editor</h2>
+                <textarea id="code-input" placeholder="Enter MATUS code here..." style="height: 300px; margin-bottom: 10px;"></textarea>
+                <div class="button-group">
+                    <button onclick="runCode()">▶ Execute</button>
+                    <button onclick="clearCode()">🗑 Clear</button>
+                </div>
+                <div id="code-output" class="output-panel"></div>
+            </div>
+
+            <div class="status-bar">
+                <div class="status-indicator">
+                    <span class="status-dot"></span>
+                    <span>System Online - Ready</span>
+                </div>
+                <div style="color: #00aa00;">MATUS ULTIMATE v1.0</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTool(toolId) {
+            // Hide all panels
+            document.querySelectorAll('.tool-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+
+            // Show selected panel
+            document.getElementById(toolId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        async function executeAPI(endpoint, data) {
+            try {
+                const response = await fetch('/api/execute', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code: endpoint, type: 'matus', ...data })
+                });
+                return await response.json();
+            } catch (error) {
+                return { error: error.message };
+            }
+        }
+
+        async function runPortScan() {
+            const target = document.getElementById('ps-target').value;
+            const ports = document.getElementById('ps-ports').value;
+            const output = document.getElementById('ps-output');
+
+            if (!target) {
+                output.textContent = 'Error: Enter target host/IP';
+                return;
+            }
+
+            output.textContent = 'Scanning...';
+            const result = await executeAPI(`advanced_port_scan("${target}", "${ports}")`, {});
+            output.textContent = JSON.stringify(result, null, 2);
+        }
+
+        async function runDNSEnum() {
+            const domain = document.getElementById('dns-domain').value;
+            const output = document.getElementById('dns-output');
+
+            if (!domain) {
+                output.textContent = 'Error: Enter domain';
+                return;
+            }
+
+            output.textContent = 'Enumerating...';
+            const result = await executeAPI(`advanced_dns_enum("${domain}")`, {});
+            output.textContent = JSON.stringify(result, null, 2);
+        }
+
+        async function runVulnScan() {
+            const url = document.getElementById('vs-url').value;
+            const output = document.getElementById('vs-output');
+
+            if (!url) {
+                output.textContent = 'Error: Enter URL';
+                return;
+            }
+
+            output.textContent = 'Scanning...';
+            const result = await executeAPI(`advanced_vuln_scan("${url}")`, {});
+            output.textContent = JSON.stringify(result, null, 2);
+        }
+
+        async function runSQLInjection() {
+            const url = document.getElementById('sql-url').value;
+            const param = document.getElementById('sql-param').value;
+            const output = document.getElementById('sql-output');
+
+            if (!url || !param) {
+                output.textContent = 'Error: Enter URL and parameter';
+                return;
+            }
+
+            output.textContent = 'Testing...';
+            const result = await executeAPI(`advanced_sql_injection("${url}", "${param}")`, {});
+            output.textContent = JSON.stringify(result, null, 2);
+        }
+
+        async function runXSSDetection() {
+            const url = document.getElementById('xss-url').value;
+            const output = document.getElementById('xss-output');
+
+            if (!url) {
+                output.textContent = 'Error: Enter URL';
+                return;
+            }
+
+            output.textContent = 'Testing...';
+            const result = await executeAPI(`advanced_xss_detection("${url}")`, {});
+            output.textContent = JSON.stringify(result, null, 2);
+        }
+
+        async function runSysEnum() {
+            const output = document.getElementById('sys-output');
+            output.textContent = 'Enumerating...';
+            const result = await executeAPI(`advanced_sys_enum()`, {});
+            output.textContent = JSON.stringify(result, null, 2);
+        }
+
+        async function runPrivEsc() {
+            const output = document.getElementById('priv-output');
+            output.textContent = 'Checking...';
+            const result = await executeAPI(`advanced_priv_esc_check()`, {});
+            output.textContent = JSON.stringify(result, null, 2);
+        }
+
+        async function runPasswordCheck() {
+            const password = document.getElementById('pass-input').value;
+            const output = document.getElementById('pass-output');
+
+            if (!password) {
+                output.textContent = 'Error: Enter password';
+                return;
+            }
+
+            const result = await executeAPI(`advanced_password_check("${password}")`, {});
+            output.textContent = JSON.stringify(result, null, 2);
+        }
+
+        async function runReverseShell() {
+            const ip = document.getElementById('rs-ip').value;
+            const port = document.getElementById('rs-port').value;
+            const type = document.getElementById('rs-type').value;
+            const output = document.getElementById('rs-output');
+
+            if (!ip || !port) {
+                output.textContent = 'Error: Enter IP and port';
+                return;
+            }
+
+            const result = await executeAPI(`advanced_reverse_shell("${ip}", ${port}, "${type}")`, {});
+            output.textContent = JSON.stringify(result, null, 2);
+        }
+
+        async function runCode() {
+            const code = document.getElementById('code-input').value;
+            const output = document.getElementById('code-output');
+
+            if (!code) {
+                output.textContent = 'Error: Enter code';
+                return;
+            }
+
+            output.textContent = 'Executing...';
+            const result = await executeAPI(code, {});
+            output.textContent = JSON.stringify(result, null, 2);
+        }
+
+        function clearCode() {
+            document.getElementById('code-input').value = '';
+            document.getElementById('code-input').focus();
+        }
+    </script>
+</body>
+</html>

@@ -31,6 +31,10 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+app.get('/advanced', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'advanced.html'));
+});
+
 function executeCode(code, type) {
   return new Promise((resolve, reject) => {
     let output = '';
@@ -41,11 +45,14 @@ import sys
 sys.path.insert(0, '${__dirname}')
 try:
     from matus_ultimate import MatusUltimate
+    from matus_advanced_hacking import *
     matus = MatusUltimate()
     result = matus.execute("""${code.replace(/"/g, '\\"').replace(/\n/g, '\\n')}""")
     print(result)
 except Exception as e:
+    import traceback
     print(f"Error: {str(e)}")
+    traceback.print_exc()
 `;
 
     const process = spawn('python3', ['-c', pythonScript], {
@@ -85,6 +92,7 @@ app.listen(PORT, () => {
 ╔════════════════════════════════════════╗
 ║   MATUS ULTIMATE - Server Running      ║
 ║   http://localhost:${PORT}                  ║
+║   Advanced: http://localhost:${PORT}/advanced ║
 ║   Status: Ready for Execution          ║
 ╚════════════════════════════════════════╝
   `);
