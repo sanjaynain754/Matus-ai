@@ -1,7 +1,7 @@
 {
-  "name": "matus-ultimate",
+  "name": "matus-ai",
   "version": "1.0.0",
-  "description": "MATUS ULTIMATE - The All-Powerful Programming Language",
+  "description": "MATUS ULTIMATE - The most powerful penetration testing and bug bounty framework. Multi-language support, advanced hacking tools, Azure testing, HackerOne integration, and AI-powered security analysis.",
   "type": "module",
   "main": "server.js",
   "scripts": {
@@ -9,17 +9,37 @@
     "start": "node server.js"
   },
   "keywords": [
-    "matus",
-    "programming-language",
+    "penetration-testing",
+    "bug-bounty",
     "hacking",
-    "security"
+    "security",
+    "azure",
+    "hackerone",
+    "metasploit",
+    "hydra",
+    "network-scanning",
+    "vulnerability-assessment",
+    "exploitation",
+    "reconnaissance",
+    "cybersecurity",
+    "ethical-hacking"
   ],
   "author": "sanjaynain754",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sanjaynain754/Matus-ai.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sanjaynain754/Matus-ai/issues"
+  },
+  "homepage": "https://github.com/sanjaynain754/Matus-ai#readme",
   "engines": {
-    "node": "18.x"
+    "node": ">=14.0.0"
   },
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "axios": "^1.4.0",
+    "body-parser": "^1.20.2"
   }
 }
