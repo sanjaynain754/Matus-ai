@@ -19,8 +19,8 @@ source.include_exts = py,png,jpg,kv,atlas
 version = 1.0.0
 
 # (list) Application requirements
-# यहाँ सारी dependencies डालो
-requirements = python3==3.11.10,kivy==2.3.0,requests,pyjnius,android
+# IMPORTANT: Python 3.11.10 specify किया है (3.14 बहुत नया है)
+requirements = python3==3.11.10,kivy==2.4.0,requests,pyjnius,android
 
 # (str) Presplash of the application
 #presplash.filename = %(source.dir)s/data/presplash.png
@@ -36,7 +36,6 @@ orientation = portrait
 #
 
 # (list) Permissions
-# यह बहुत important है - सारे permissions यहाँ डालो
 android.permissions = \
     INTERNET, \
     RECORD_AUDIO, \
@@ -71,45 +70,6 @@ android.accept_sdk_license = True
 
 # (str) The Android arch to build for
 android.archs = arm64-v8a, armeabi-v7a
-
-# (str) Android entry point, default is ok for Kivy-based app
-#android.entrypoint = org.kivy.android.PythonActivity
-
-# (list) Android additional libraries to copy
-#android.add_libs_armeabi = libs/android/armeabi/*.so
-#android.add_libs_armeabi_v7a = libs/android/armeabi-v7a/*.so
-#android.add_libs_arm64_v8a = libs/android/arm64-v8a/*.so
-#android.add_libs_x86 = libs/android/x86/*.so
-#android.add_libs_mips = libs/android/mips/*.so
-
-# (bool) decides whether to use p4a or gradlew
-#android.enableandroidx = True
-
-#
-# iOS specific
-#
-
-# (str) Path to a custom kivy-ios folder
-#ios.kivy_ios_dir = ../kivy-ios
-
-#
-# Python for android (p4a) specific
-#
-
-# (str) python-for-android URL to use for checkout
-#p4a.url =
-
-# (str) python-for-android fork to use in case if p4a.url is not specified
-#p4a.fork = kivy
-
-# (str) python-for-android branch to use, defaults to master
-#p4a.branch = master
-
-# (str) python-for-android specific commit to use, defaults to HEAD
-#p4a.commit = HEAD
-
-# (str) python-for-android git clone directory
-#p4a.source_dir =
 
 #
 # Logging
