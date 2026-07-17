@@ -22,7 +22,10 @@ jobs:
         run: |
           echo "Destroying old Python caches..."
           rm -rf .buildozer ~/.buildozer /home/runner/.buildozer
+          
+          # CRITICAL FIX: Use Buildozer 1.5.0 which is compatible with Python 3.14
           pip install buildozer==1.5.0 cython==0.29.33
+          
           sudo apt-get update
           sudo apt-get install -y build-essential git python3-pip openjdk-17-jdk zipalign libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
 
