@@ -19,14 +19,8 @@ source.include_exts = py,png,jpg,kv,atlas
 version = 1.0.0
 
 # (list) Application requirements
-# IMPORTANT: Python 3.11.10 specify किया है (3.14 बहुत नया है)
-requirements = python3==3.11.10,kivy==2.4.0,requests,pyjnius,android
-
-# (str) Presplash of the application
-#presplash.filename = %(source.dir)s/data/presplash.png
-
-# (str) Icon of the application
-#icon.filename = %(source.dir)s/data/icon.png
+# CRITICAL FIX: Python 3.10.14 और Kivy 2.3.0 को फोर्स किया गया है
+requirements = python3==3.10.14,kivy==2.3.0,cython==0.29.33,requests,pyjnius,android
 
 # (str) Supported orientation (one of landscape, sensorLandscape, portrait or all)
 orientation = portrait
@@ -71,6 +65,9 @@ android.accept_sdk_license = True
 # (str) The Android arch to build for
 android.archs = arm64-v8a, armeabi-v7a
 
+# (str) Force python-for-android to use this Python version
+p4a.python_version = 3.10
+
 #
 # Logging
 #
@@ -80,10 +77,6 @@ log_level = 2
 
 # (str) Display warning if buildozer is run as root (0 = False, 1 = True)
 warn_on_root = 0
-
-#
-# Version-specific settings
-#
 
 [buildozer]
 
