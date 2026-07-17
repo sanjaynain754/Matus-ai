@@ -19,8 +19,8 @@ source.include_exts = py,png,jpg,kv,atlas
 version = 1.0.0
 
 # (list) Application requirements
-# CRITICAL FIX: Python 3.10.14 और Kivy 2.3.0 को फोर्स किया गया है
-requirements = python3==3.10.14,kivy==2.3.0,cython==0.29.33,requests,pyjnius,android
+# NOTE: हमने यहाँ सिर्फ python3 लिखा है, version को हम YAML में force करेंगे
+requirements = python3,kivy==2.3.0,cython==0.29.33,requests,pyjnius,android
 
 # (str) Supported orientation (one of landscape, sensorLandscape, portrait or all)
 orientation = portrait
@@ -64,9 +64,6 @@ android.accept_sdk_license = True
 
 # (str) The Android arch to build for
 android.archs = arm64-v8a, armeabi-v7a
-
-# (str) Force python-for-android to use this Python version
-p4a.python_version = 3.10
 
 #
 # Logging
