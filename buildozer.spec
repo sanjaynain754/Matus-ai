@@ -20,7 +20,7 @@ version = 1.0.0
 
 # (list) Application requirements
 # यहाँ सारी dependencies डालो
-requirements = python3,kivy,requests,pyjnius,android
+requirements = python3==3.11.10,kivy==2.3.0,requests,pyjnius,android
 
 # (str) Presplash of the application
 #presplash.filename = %(source.dir)s/data/presplash.png
