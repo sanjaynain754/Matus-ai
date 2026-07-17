@@ -1,0 +1,89 @@
+name: Build Matus AI APK
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:  # Manual trigger भी allow करेगा
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install buildozer cython==0.29.33
+    
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          build-essential git python3 python3-pip \
+          openjdk-17-jdk zipalign \
+          libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev \
+          libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev \
+          zlib1g-dev libgstreamer1.0 libgstreamer-plugins-base1.0 \
+          libltdl-dev pkg-config autoconf automake
+    
+    - name: Setup Android SDK
+      run: |
+        export ANDROID_HOME=$HOME/android-sdk
+        mkdir -p $ANDROID_HOME/cmdline-tools
+        wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+        unzip -q commandlinetools-linux-11076708_latest.zip -d $ANDROID_HOME/cmdline-tools
+        mv $ANDROID_HOME/cmdline-tools/cmdline-tools $ANDROID_HOME/cmdline-tools/latest
+        export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
+        yes | sdkmanager --licenses || true
+        sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.2"
+    
+    - name: Build APK with Buildozer
+      env:
+        ANDROID_HOME: ${{ env.ANDROID_HOME }}
+      run: |
+        # buildozer.spec में android.sdk को update करना
+        sed -i 's/android.sdk = .*/android.sdk = 33/' buildozer.spec
+        sed -i 's/android.accept_sdk_license = .*/android.accept_sdk_license = True/' buildozer.spec
+        # Build start करो
+        buildozer android debug
+    
+    - name: Upload APK artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: MatusAI-APK
+        path: bin/*.apk
+        retention-days: 30
+    
+    - name: Create Release (on main branch)
+      if: github.ref == 'refs/heads/main'
+      uses: softprops/action-gh-release@v1
+      with:
+        files: bin/*.apk
+        tag_name: v${{ github.run_number }}
+        name: Matus AI v${{ github.run_number }}
+        body: |
+          🤖 **Matus AI Controller - Auto Build**
+          
+          **Features:**
+          - 📱 Phone Control (Apps, Brightness, Battery)
+          - 🎤 Voice Input Support
+          - 🔍 Web Search (DuckDuckGo)
+          - 🧠 Natural Language Commands (Hindi + English)
+          - 🔋 Battery Optimizer
+          
+          **How to install:**
+          1. Download APK from below
+          2. Enable "Install from Unknown Sources"
+          3. Install and enjoy!
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
