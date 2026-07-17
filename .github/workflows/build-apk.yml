@@ -21,7 +21,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install buildozer cython==0.29.33
+        pip install buildozer==1.5.0 cython==0.29.33
     
     - name: Install system dependencies
       run: |
@@ -45,23 +45,25 @@ jobs:
         yes | sdkmanager --licenses || true
         sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.2"
     
-    - name: Clean Buildozer Cache (CRITICAL FIX)
+    - name: Clean Buildozer Cache
       run: |
-        echo "🧹 Purging old Python 3.14 cache to prevent conflicts..."
+        echo "Cleaning old cache..."
         rm -rf .buildozer
         rm -rf ~/.buildozer
-        echo "✅ Cache cleared successfully."
     
-    - name: Build APK with Buildozer
+    - name: Build APK with Buildozer (FORCED PYTHON 3.10)
       env:
         ANDROID_HOME: ${{ env.ANDROID_HOME }}
+        # यह सबसे जरूरी लाइन है - यह Buildozer को Python 3.10 use करने पर मजबूर करेगी
+        P4A_python_version: "3.10"
+        P4A_BOOTSTRAP: "sdl2"
       run: |
-        # Failsafe: Force update buildozer.spec right before build
-        sed -i 's/^requirements = .*/requirements = python3==3.10.14,kivy==2.3.0,cython==0.29.33,requests,pyjnius,android/' buildozer.spec
-        sed -i 's/^android.sdk = .*/android.sdk = 33/' buildozer.spec
-        sed -i 's/^android.accept_sdk_license = .*/android.accept_sdk_license = True/' buildozer.spec
+        echo " Starting build with Python 3.10 forced via Environment Variables..."
+        # Forcefully update the spec file right before build
+        sed -i 's/^requirements = .*/requirements = python3,kivy==2.3.0,cython==0.29.33,requests,pyjnius,android/' buildozer.spec
+        echo "p4a.python_version = 3.10" >> buildozer.spec
         
-        # Start the build
+        # Run the build
         buildozer android debug
     
     - name: Upload APK artifact
