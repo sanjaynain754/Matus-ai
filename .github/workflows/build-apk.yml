@@ -3,9 +3,7 @@ name: Build Matus AI APK
 on:
   push:
     branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
-  workflow_dispatch:  # Manual trigger भी allow करेगा
+  workflow_dispatch:
 
 jobs:
   build:
@@ -33,7 +31,7 @@ jobs:
           openjdk-17-jdk zipalign \
           libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev \
           libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev \
-          zlib1g-dev libgstreamer1.0 libgstreamer-plugins-base1.0 \
+          zlib1g-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
           libltdl-dev pkg-config autoconf automake
     
     - name: Setup Android SDK
@@ -47,14 +45,23 @@ jobs:
         yes | sdkmanager --licenses || true
         sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.2"
     
+    - name: Clean Buildozer Cache (CRITICAL FIX)
+      run: |
+        echo "🧹 Purging old Python 3.14 cache to prevent conflicts..."
+        rm -rf .buildozer
+        rm -rf ~/.buildozer
+        echo "✅ Cache cleared successfully."
+    
     - name: Build APK with Buildozer
       env:
         ANDROID_HOME: ${{ env.ANDROID_HOME }}
       run: |
-        # buildozer.spec में android.sdk को update करना
-        sed -i 's/android.sdk = .*/android.sdk = 33/' buildozer.spec
-        sed -i 's/android.accept_sdk_license = .*/android.accept_sdk_license = True/' buildozer.spec
-        # Build start करो
+        # Failsafe: Force update buildozer.spec right before build
+        sed -i 's/^requirements = .*/requirements = python3==3.10.14,kivy==2.3.0,cython==0.29.33,requests,pyjnius,android/' buildozer.spec
+        sed -i 's/^android.sdk = .*/android.sdk = 33/' buildozer.spec
+        sed -i 's/^android.accept_sdk_license = .*/android.accept_sdk_license = True/' buildozer.spec
+        
+        # Start the build
         buildozer android debug
     
     - name: Upload APK artifact
@@ -63,27 +70,3 @@ jobs:
         name: MatusAI-APK
         path: bin/*.apk
         retention-days: 30
-    
-    - name: Create Release (on main branch)
-      if: github.ref == 'refs/heads/main'
-      uses: softprops/action-gh-release@v1
-      with:
-        files: bin/*.apk
-        tag_name: v${{ github.run_number }}
-        name: Matus AI v${{ github.run_number }}
-        body: |
-          🤖 **Matus AI Controller - Auto Build**
-          
-          **Features:**
-          - 📱 Phone Control (Apps, Brightness, Battery)
-          - 🎤 Voice Input Support
-          - 🔍 Web Search (DuckDuckGo)
-          - 🧠 Natural Language Commands (Hindi + English)
-          - 🔋 Battery Optimizer
-          
-          **How to install:**
-          1. Download APK from below
-          2. Enable "Install from Unknown Sources"
-          3. Install and enjoy!
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
