@@ -1,4 +1,4 @@
-name: Build Matus AI APK
+name: Matus AI Build (Final Fix)
 
 on:
   push:
@@ -8,82 +8,54 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
     steps:
-    - name: Step 1 - Checkout Code
-      uses: actions/checkout@v4
-    
-    - name: Step 2 - Setup Python 3.11
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.11'
-    
-    - name: Step 3 - Install Buildozer and Cython
-      run: |
-        python -m pip install --upgrade pip
-        pip install buildozer==1.5.0 cython==0.29.33
-    
-    - name: Step 4 - Install System Dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y \
-          build-essential \
-          git \
-          python3 \
-          python3-pip \
-          openjdk-17-jdk \
-          zipalign \
-          libsdl2-dev \
-          libsdl2-image-dev \
-          libsdl2-mixer-dev \
-          libsdl2-ttf-dev \
-          libportmidi-dev \
-          libswscale-dev \
-          libavformat-dev \
-          libavcodec-dev \
-          zlib1g-dev \
-          libgstreamer1.0-dev \
-          libgstreamer-plugins-base1.0-dev \
-          libltdl-dev \
-          pkg-config \
-          autoconf \
-          automake \
-          libtool
-    
-    - name: Step 5 - Setup Android SDK
-      run: |
-        export ANDROID_HOME=$HOME/android-sdk
-        mkdir -p $ANDROID_HOME/cmdline-tools
-        wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
-        unzip -q commandlinetools-linux-11076708_latest.zip -d $ANDROID_HOME/cmdline-tools
-        mv $ANDROID_HOME/cmdline-tools/cmdline-tools $ANDROID_HOME/cmdline-tools/latest
-        export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
-        yes | sdkmanager --licenses || true
-        sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.2"
-    
-    - name: Step 6 - Clean Old Buildozer Cache
-      run: |
-        echo "Cleaning old cache..."
-        rm -rf .buildozer
-        rm -rf ~/.buildozer
-    
-    - name: Step 7 - Force Python 3.11 in buildozer.spec
-      run: |
-        sed -i 's/^requirements = .*/requirements = python3==3.11,kivy==2.3.0,cython==0.29.33,requests,pyjnius,android/' buildozer.spec
-        if ! grep -q "p4a.python_version" buildozer.spec; then
-          echo "p4a.python_version = 3.11" >> buildozer.spec
-        fi
-        cat buildozer.spec | grep -E "(requirements|python_version)"
-    
-    - name: Step 8 - Build APK with Buildozer
-      env:
-        ANDROID_HOME: ${{ env.ANDROID_HOME }}
-      run: |
-        buildozer android debug
-    
-    - name: Step 9 - Upload APK Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: MatusAI-APK
-        path: bin/*.apk
-        retention-days: 30
+      - name: Step 1 - Code Download
+        uses: actions/checkout@v4
+
+      - name: Step 2 - Python 3.14 Setup (Matching Target)
+        uses: actions/setup-python@v5
+        with:
+          # We use 3.14 here to match the target python downloaded by p4a
+          python-version: '3.14'
+
+      - name: Step 3 - Nuke Old Cache & Install Tools
+        run: |
+          echo "Destroying old Python caches..."
+          rm -rf .buildozer ~/.buildozer /home/runner/.buildozer
+          pip install buildozer==1.5.0 cython==0.29.33
+          sudo apt-get update
+          sudo apt-get install -y build-essential git python3-pip openjdk-17-jdk zipalign libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
+
+      - name: Step 4 - Android SDK & Force Master Branch
+        run: |
+          export ANDROID_HOME=$HOME/android-sdk
+          mkdir -p $ANDROID_HOME/cmdline-tools
+          wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+          unzip -q commandlinetools-linux-11076708_latest.zip -d $ANDROID_HOME/cmdline-tools
+          mv $ANDROID_HOME/cmdline-tools/cmdline-tools $ANDROID_HOME/cmdline-tools/latest
+          export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
+          yes | sdkmanager --licenses || true
+          sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.2"
+          
+          # FORCE FIX: Inject the magic lines to block Python 3.14 download
+          sed -i 's/^requirements = .*/requirements = python3==3.11,kivy==2.3.0,cython==0.29.33,requests,pyjnius,android/' buildozer.spec
+          
+          # Add p4a.branch and p4a.version if not present
+          if ! grep -q "p4a.branch" buildozer.spec; then
+            echo "p4a.branch = master" >> buildozer.spec
+            echo "p4a.version = 2024.01.21" >> buildozer.spec
+          fi
+          
+          echo "✅ Verification: Checking if master branch is locked..."
+          cat buildozer.spec | grep -E "(requirements|p4a.branch|p4a.version)"
+
+      - name: Step 5 - Build APK
+        env:
+          ANDROID_HOME: ${{ env.ANDROID_HOME }}
+        run: buildozer android debug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: MatusAI-APK
+          path: bin/*.apk
