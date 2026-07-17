@@ -1,381 +1,89 @@
-# Matus AI Controller - GitHub Actions Build Workflow
-# यह फाइल GitHub को बताती है कि APK कैसे बनाना है
-# हर step को detail में explain किया गया है
-
-# Workflow का नाम (GitHub Actions tab में यह दिखेगा)
 name: Build Matus AI APK
 
-# यह workflow कब run होगा
 on:
-  # जब भी code push हो (main या master branch में)
   push:
     branches: [ main, master ]
-  
-  # जब भी pull request आए
-  pull_request:
-    branches: [ main, master ]
-  
-  # Manual trigger (तुम खुद button दबाकर run कर सकते हो)
   workflow_dispatch:
 
-# Jobs define करते हैं कि क्या काम करना है
 jobs:
-  # Main build job
   build:
-    # यह Ubuntu 24.04 पर चलेगा (GitHub का latest stable server)
     runs-on: ubuntu-latest
     
-    # Steps - यह सारे steps एक के बाद एक run होंगे
     steps:
-      
-      # ============================================================
-      # STEP 1: Code Download
-      # यह तुम्हारी GitHub repo से सारा code download करता है
-      # ============================================================
-      - name: Step 1 - Checkout Code (Download from GitHub)
-        uses: actions/checkout@v4
-        with:
-          # यह सारी history download करता है (अगर जरूरत हो)
-          fetch-depth: 0
-      
-      # ============================================================
-      # STEP 2: Python Setup
-      # यह GitHub server पर Python 3.10 install करता है
-      # (यह host Python है, APK के अंदर Python 3.11 जाएगा)
-      # ============================================================
-      - name: Step 2 - Setup Python 3.10 on GitHub Server
-        uses: actions/setup-python@v5
-        with:
-          # यह GitHub server का Python version है (build tools के लिए)
-          python-version: '3.10'
-          
-          # यह cache enable करता है ताकि builds तेज़ हों
-          cache: 'pip'
-      
-      # ============================================================
-      # STEP 3: Install Dependencies
-      # यह Buildozer और Cython install करता है
-      # ============================================================
-      - name: Step 3 - Install Buildozer and Cython
-        run: |
-          # सबसे पहले pip को update करो
-          echo "📦 Upgrading pip..."
-          python -m pip install --upgrade pip
-          
-          # Buildozer install करो (APK बनाने का tool)
-          echo "📦 Installing Buildozer..."
-          pip install buildozer==1.5.0
-          
-          # Cython install करो (C extensions compile करने के लिए)
-          # Cython 0.29.33 Kivy 2.3.0 के साथ perfectly compatible है
-          echo "📦 Installing Cython 0.29.33..."
-          pip install cython==0.29.33
-          
-          # Verify installation
-          echo "✅ Verifying installations..."
-          buildozer --version
-          python -c "import cython; print(f'Cython version: {cython.__version__}')"
-      
-      # ============================================================
-      # STEP 4: Install System Dependencies
-      # यह Ubuntu पर सारे required libraries install करता है
-      # ============================================================
-      - name: Step 4 - Install System Dependencies (SDL2, GStreamer, etc.)
-        run: |
-          # System packages को update करो
-          echo "🔄 Updating system packages..."
-          sudo apt-get update -y
-          
-          # सारे required packages install करो
-          # यह एक बहुत बड़ी list है क्योंकि Kivy को बहुत सारी libraries चाहिए
-          echo "📦 Installing system dependencies..."
-          sudo apt-get install -y \
-            # Basic build tools
-            build-essential \
-            git \
-            python3 \
-            python3-pip \
-            
-            # Java (Android build के लिए जरूरी)
-            openjdk-17-jdk \
-            zipalign \
-            
-            # SDL2 libraries (Kivy का graphics backend)
-            libsdl2-dev \
-            libsdl2-image-dev \
-            libsdl2-mixer-dev \
-            libsdl2-ttf-dev \
-            
-            # Audio libraries
-            libportmidi-dev \
-            libswscale-dev \
-            libavformat-dev \
-            libavcodec-dev \
-            
-            # Compression libraries
-            zlib1g-dev \
-            
-            # GStreamer (video/audio playback के लिए)
-            libgstreamer1.0-dev \
-            libgstreamer-plugins-base1.0-dev \
-            
-            # Other required libraries
-            libltdl-dev \
-            pkg-config \
-            autoconf \
-            automake \
-            libtool \
-            
-            # Additional dependencies
-            libffi-dev \
-            libssl-dev \
-            libbz2-dev \
-            liblzma-dev \
-            libsqlite3-dev \
-            libncurses5-dev \
-            libncursesw5-dev \
-            libreadline-dev \
-            libgdbm-dev \
-            libdb5.3-dev \
-            libexpat1-dev \
-            libmpdec-dev \
-            uuid-dev \
-            tk-dev
-            
-          echo "✅ System dependencies installed successfully"
-      
-      # ============================================================
-      # STEP 5: Setup Android SDK
-      # यह Android SDK download और configure करता है
-      # ============================================================
-      - name: Step 5 - Setup Android SDK and NDK
-        run: |
-          # Android SDK के लिए directory बनाओ
-          echo "📁 Creating Android SDK directory..."
-          export ANDROID_HOME=$HOME/android-sdk
-          mkdir -p $ANDROID_HOME/cmdline-tools
-          
-          # Android command line tools download करो
-          echo "📥 Downloading Android command line tools..."
-          wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
-          
-          # Zip file को extract करो
-          echo "📦 Extracting command line tools..."
-          unzip -q commandlinetools-linux-11076708_latest.zip -d $ANDROID_HOME/cmdline-tools
-          
-          # Folder को rename करो (Android SDK को यह नाम चाहिए)
-          echo " Renaming folder..."
-          mv $ANDROID_HOME/cmdline-tools/cmdline-tools $ANDROID_HOME/cmdline-tools/latest
-          
-          # PATH में add करो ताकि commands चल सकें
-          echo " Adding to PATH..."
-          export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
-          
-          # Android SDK licenses accept करो (यह जरूरी है)
-          echo "✅ Accepting Android SDK licenses..."
-          yes | sdkmanager --licenses || true
-          
-          # Required Android packages install करो
-          echo "📦 Installing Android SDK packages..."
-          sdkmanager "platform-tools" \
-                     "platforms;android-33" \
-                     "build-tools;33.0.2"
-          
-          # Verify installation
-          echo "✅ Android SDK setup complete"
-          echo "ANDROID_HOME=$ANDROID_HOME"
-      
-      # ============================================================
-      # STEP 6: Clean Old Buildozer Cache (CRITICAL FIX)
-      # यह पुरानी Python 3.14 की cache files को delete करता है
-      # यह सबसे IMPORTANT step है जो Python 3.14 की problem fix करता है
-      # ============================================================
-      - name: Step 6 - Clean Old Buildozer Cache (CRITICAL FIX for Python 3.14)
-        run: |
-          echo "🧹 ============================================"
-          echo "🧹 CRITICAL: Cleaning all old Buildozer caches..."
-          echo "🧹 यह Python 3.14 की problem को fix करेगा"
-          echo "🧹 ============================================"
-          
-          # Local .buildozer folder delete करो
-          echo "🗑️ Deleting local .buildozer folder..."
-          rm -rf .buildozer
-          
-          # Home directory की .buildozer folder delete करो
-          echo "️ Deleting ~/.buildozer folder..."
-          rm -rf ~/.buildozer
-          
-          # Runner की .buildozer folder delete करो
-          echo "🗑️ Deleting /home/runner/.buildozer folder..."
-          rm -rf /home/runner/.buildozer
-          
-          # Workspace की सभी .buildozer folders delete करो
-          echo "🗑️ Deleting all .buildozer folders in workspace..."
-          find /home/runner/work -name ".buildozer" -type d -exec rm -rf {} + 2>/dev/null || true
-          
-          # Python cache भी delete करो
-          echo "️ Deleting Python cache..."
-          find /home/runner/work -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
-          
-          # Verify deletion
-          echo "✅ Verifying cache deletion..."
-          if [ -d ".buildozer" ]; then
-            echo "❌ ERROR: .buildozer folder still exists!"
-            exit 1
-          else
-            echo "✅ SUCCESS: All caches cleaned successfully!"
-          fi
-          
-          echo "🧹 ============================================"
-          echo "🧹 Cache cleaning complete!"
-          echo "🧹 अब fresh build शुरू होगा"
-          echo "🧹 ============================================"
-      
-      # ============================================================
-      # STEP 7: Force Python 3.11 in buildozer.spec
-      # यह buildozer.spec को verify और update करता है
-      # यह ensure करता है कि Python 3.11 ही use हो
-      # ============================================================
-      - name: Step 7 - Force Python 3.11 in buildozer.spec
-        run: |
-          echo "🔧 ============================================"
-          echo " Forcing Python 3.11 in buildozer.spec..."
-          echo "🔧 यह Python 3.14 download को block करेगा"
-          echo "🔧 ============================================"
-          
-          # पहले देखो कि current requirements क्या हैं
-          echo "📋 Current requirements:"
-          grep "^requirements" buildozer.spec || echo "️ requirements line not found!"
-          
-          # requirements line को force update करो
-          echo "🔄 Updating requirements line..."
-          sed -i 's/^requirements = .*/requirements = python3==3.11,kivy==2.3.0,cython==0.29.33,requests,pyjnius,android/' buildozer.spec
-          
-          # p4a.python_version check करो और add करो अगर नहीं है
-          echo "🔄 Checking p4a.python_version..."
-          if grep -q "^p4a.python_version" buildozer.spec; then
-            echo "✅ p4a.python_version already exists, updating..."
-            sed -i 's/^p4a.python_version = .*/p4a.python_version = 3.11/' buildozer.spec
-          else
-            echo "➕ Adding p4a.python_version..."
-            echo "p4a.python_version = 3.11" >> buildozer.spec
-          fi
-          
-          # p4a.branch check करो और add करो अगर नहीं है
-          echo "🔄 Checking p4a.branch..."
-          if grep -q "^p4a.branch" buildozer.spec; then
-            echo "✅ p4a.branch already exists, updating..."
-            sed -i 's/^p4a.branch = .*/p4a.branch = master/' buildozer.spec
-          else
-            echo "➕ Adding p4a.branch..."
-            echo "p4a.branch = master" >> buildozer.spec
-          fi
-          
-          # p4a.version check करो और add करो अगर नहीं है
-          echo "🔄 Checking p4a.version..."
-          if grep -q "^p4a.version" buildozer.spec; then
-            echo "✅ p4a.version already exists, updating..."
-            sed -i 's/^p4a.version = .*/p4a.version = 2024.01.21/' buildozer.spec
-          else
-            echo "➕ Adding p4a.version..."
-            echo "p4a.version = 2024.01.21" >> buildozer.spec
-          fi
-          
-          # Final verification
-          echo "📋 Final buildozer.spec verification:"
-          echo "----------------------------------------"
-          grep -E "^(requirements|p4a\.)" buildozer.spec
-          echo "----------------------------------------"
-          
-          echo "✅ buildozer.spec successfully updated!"
-          echo " ============================================"
-      
-      # ============================================================
-      # STEP 8: Build APK with Buildozer
-      # यह actual APK build process है
-      # यह सबसे लंबा step है (10-15 मिनट लग सकते हैं)
-      # ============================================================
-      - name: Step 8 - Build APK with Buildozer (Main Build Process)
-        env:
-          # Android SDK का path
-          ANDROID_HOME: ${{ env.ANDROID_HOME }}
-          
-          # यह environment variable Python 3.11 को force करता है
-          # यह सबसे IMPORTANT variable है
-          P4A_python_version: "3.11"
-          
-          # Bootstrap force करो
-          P4A_BOOTSTRAP: "sdl2"
-          
-          # Arch force करो
-          P4A_arch: "arm64-v8a"
-        run: |
-          echo "🚀 ============================================"
-          echo "🚀 Starting APK Build Process..."
-          echo "🚀 यह process 10-15 मिनट ले सकता है"
-          echo "🚀 Python 3.11 force किया गया है"
-          echo " ============================================"
-          
-          # Buildozer को debug mode में run करो
-          # यह detailed logs दिखाएगा ताकि errors track कर सकें
-          echo " Running: buildozer android debug"
-          buildozer android debug
-          
-          # Build complete होने के बाद
-          echo "✅ ============================================"
-          echo "✅ Build process completed!"
-          echo "✅ ============================================"
-          
-          # APK file check करो
-          echo "📦 Checking for APK file..."
-          if ls bin/*.apk 1> /dev/null 2>&1; then
-            echo "✅ APK file found!"
-            ls -lh bin/*.apk
-          else
-            echo "❌ ERROR: APK file not found!"
-            echo "Build may have failed. Check logs above."
-            exit 1
-          fi
-      
-      # ============================================================
-      # STEP 9: Upload APK Artifact
-      # यह बनी हुई APK file को GitHub Actions में upload करता है
-      # ताकि तुम उसे download कर सको
-      # ============================================================
-      - name: Step 9 - Upload APK Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          # Artifact का नाम (GitHub Actions में यह दिखेगा)
-          name: MatusAI-APK
-          
-          # APK file का path
-          path: bin/*.apk
-          
-          # कितने दिनों तक artifact available रहेगा
-          retention-days: 30
-          
-          # अगर multiple APKs हों तो सभी upload करो
-          if-no-files-found: error
-      
-      # ============================================================
-      # STEP 10: Build Summary
-      # यह final summary दिखाता है
-      # ============================================================
-      - name: Step 10 - Build Summary
-        if: always()
-        run: |
-          echo "📊 ============================================"
-          echo "📊 BUILD SUMMARY"
-          echo "📊 ============================================"
-          
-          # Build status check करो
-          if [ ${{ job.status }} == "success" ]; then
-            echo "✅ BUILD STATUS: SUCCESS"
-            echo "🎉 APK successfully built!"
-            echo "📥 Download APK from Artifacts section"
-          else
-            echo "❌ BUILD STATUS: FAILED"
-            echo "⚠️ Please check logs above for errors"
-          fi
-          
-          echo "📊 ============================================"
+    - name: Step 1 - Checkout Code
+      uses: actions/checkout@v4
+    
+    - name: Step 2 - Setup Python 3.11
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Step 3 - Install Buildozer and Cython
+      run: |
+        python -m pip install --upgrade pip
+        pip install buildozer==1.5.0 cython==0.29.33
+    
+    - name: Step 4 - Install System Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          build-essential \
+          git \
+          python3 \
+          python3-pip \
+          openjdk-17-jdk \
+          zipalign \
+          libsdl2-dev \
+          libsdl2-image-dev \
+          libsdl2-mixer-dev \
+          libsdl2-ttf-dev \
+          libportmidi-dev \
+          libswscale-dev \
+          libavformat-dev \
+          libavcodec-dev \
+          zlib1g-dev \
+          libgstreamer1.0-dev \
+          libgstreamer-plugins-base1.0-dev \
+          libltdl-dev \
+          pkg-config \
+          autoconf \
+          automake \
+          libtool
+    
+    - name: Step 5 - Setup Android SDK
+      run: |
+        export ANDROID_HOME=$HOME/android-sdk
+        mkdir -p $ANDROID_HOME/cmdline-tools
+        wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+        unzip -q commandlinetools-linux-11076708_latest.zip -d $ANDROID_HOME/cmdline-tools
+        mv $ANDROID_HOME/cmdline-tools/cmdline-tools $ANDROID_HOME/cmdline-tools/latest
+        export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
+        yes | sdkmanager --licenses || true
+        sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.2"
+    
+    - name: Step 6 - Clean Old Buildozer Cache
+      run: |
+        echo "Cleaning old cache..."
+        rm -rf .buildozer
+        rm -rf ~/.buildozer
+    
+    - name: Step 7 - Force Python 3.11 in buildozer.spec
+      run: |
+        sed -i 's/^requirements = .*/requirements = python3==3.11,kivy==2.3.0,cython==0.29.33,requests,pyjnius,android/' buildozer.spec
+        if ! grep -q "p4a.python_version" buildozer.spec; then
+          echo "p4a.python_version = 3.11" >> buildozer.spec
+        fi
+        cat buildozer.spec | grep -E "(requirements|python_version)"
+    
+    - name: Step 8 - Build APK with Buildozer
+      env:
+        ANDROID_HOME: ${{ env.ANDROID_HOME }}
+      run: |
+        buildozer android debug
+    
+    - name: Step 9 - Upload APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: MatusAI-APK
+        path: bin/*.apk
+        retention-days: 30
