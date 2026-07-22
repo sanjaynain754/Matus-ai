@@ -1,4 +1,4 @@
-name: Matus AI Build (Final Fix)
+name: Matus AI Build
 
 on:
   push:
@@ -8,56 +8,89 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Step 1 - Code Download
+      - name: Checkout source
         uses: actions/checkout@v4
 
-      - name: Step 2 - Python 3.14 Setup (Matching Target)
+      - name: Setup Python 3.11
         uses: actions/setup-python@v5
         with:
-          # We use 3.14 here to match the target python downloaded by p4a
-          python-version: '3.14'
+          python-version: '3.11'
 
-      - name: Step 3 - Nuke Old Cache & Install Tools
+      - name: Install build tools
         run: |
-          echo "Destroying old Python caches..."
           rm -rf .buildozer ~/.buildozer /home/runner/.buildozer
-          
-          # CRITICAL FIX: Use Buildozer 1.5.0 which is compatible with Python 3.14
+          python -m pip install --upgrade pip setuptools wheel
           pip install buildozer==1.5.0 cython==0.29.33
-          
-          sudo apt-get update
-          sudo apt-get install -y build-essential git python3-pip openjdk-17-jdk zipalign libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
 
-      - name: Step 4 - Android SDK & Force Master Branch
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            git \
+            zip \
+            unzip \
+            openjdk-17-jdk \
+            python3-pip \
+            autoconf \
+            libtool \
+            pkg-config \
+            zlib1g-dev \
+            libncurses5-dev \
+            libncursesw5-dev \
+            libtinfo5 \
+            cmake \
+            libffi-dev \
+            libssl-dev \
+            libsdl2-dev \
+            libsdl2-image-dev \
+            libsdl2-mixer-dev \
+            libsdl2-ttf-dev \
+            libportmidi-dev \
+            libswscale-dev \
+            libavformat-dev \
+            libavcodec-dev \
+            libgstreamer1.0-dev \
+            libgstreamer-plugins-base1.0-dev
+
+      - name: Setup Android SDK
         run: |
-          export ANDROID_HOME=$HOME/android-sdk
-          mkdir -p $ANDROID_HOME/cmdline-tools
+          ANDROID_HOME="$HOME/android-sdk"
+          mkdir -p "$ANDROID_HOME/cmdline-tools"
+
           wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
-          unzip -q commandlinetools-linux-11076708_latest.zip -d $ANDROID_HOME/cmdline-tools
-          mv $ANDROID_HOME/cmdline-tools/cmdline-tools $ANDROID_HOME/cmdline-tools/latest
-          export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
+          unzip -q commandlinetools-linux-11076708_latest.zip -d "$ANDROID_HOME/cmdline-tools"
+          mv "$ANDROID_HOME/cmdline-tools/cmdline-tools" "$ANDROID_HOME/cmdline-tools/latest"
+
+          echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV
+          echo "ANDROID_SDK_ROOT=$ANDROID_HOME" >> $GITHUB_ENV
+          echo "$ANDROID_HOME/cmdline-tools/latest/bin" >> $GITHUB_PATH
+          echo "$ANDROID_HOME/platform-tools" >> $GITHUB_PATH
+
+          export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin"
+
           yes | sdkmanager --licenses || true
           sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.2"
-          
-          # FORCE FIX: Inject the magic lines to block Python 3.14 download
-          sed -i 's/^requirements = .*/requirements = python3==3.11,kivy==2.3.0,cython==0.29.33,requests,pyjnius,android/' buildozer.spec
-          
-          # Add p4a.branch and p4a.version if not present
-          if ! grep -q "p4a.branch" buildozer.spec; then
-            echo "p4a.branch = master" >> buildozer.spec
-            echo "p4a.version = 2024.01.21" >> buildozer.spec
-          fi
-          
-          echo "✅ Verification: Checking if master branch is locked..."
-          cat buildozer.spec | grep -E "(requirements|p4a.branch|p4a.version)"
 
-      - name: Step 5 - Build APK
-        env:
-          ANDROID_HOME: ${{ env.ANDROID_HOME }}
+      - name: Normalize buildozer.spec
+        run: |
+          sed -i 's/^requirements = .*/requirements = python3,kivy==2.3.0,cython==0.29.33,requests,pyjnius,android/' buildozer.spec
+          sed -i '/^p4a.branch = /d' buildozer.spec
+
+          if grep -q '^p4a.version = ' buildozer.spec; then
+            sed -i 's/^p4a.version = .*/p4a.version = 2024.01.21/' buildozer.spec
+          else
+            echo 'p4a.version = 2024.01.21' >> buildozer.spec
+          fi
+
+          echo "===== buildozer.spec check ====="
+          grep -E "^(requirements|p4a.version|p4a.branch|android.api|android.minapi|android.ndk|android.sdk)" buildozer.spec || true
+
+      - name: Build APK
         run: buildozer android debug
 
       - name: Upload APK
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: MatusAI-APK
