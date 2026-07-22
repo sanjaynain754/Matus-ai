@@ -1,32 +1,56 @@
 [app]
+
+# App title
 title = Matus AI Controller
+
+# Package name
 package.name = matusai
+
+# Package domain
 package.domain = org.matus
+
+# Source code location
 source.dir = .
-source.include_exts = py,png,jpg,kv,atlas
+
+# Files to include
+source.include_exts = py,png,jpg,jpeg,kv,atlas,json,txt
+
+# Version
 version = 1.0.0
+
+# Supported orientation
 orientation = portrait
 
-# CRITICAL FIX: Exact syntax for python-for-android
-requirements = python3==3.11,kivy==2.3.0,cython==0.29.33,requests,pyjnius,android
+# App requirements
+requirements = python3,kivy==2.3.0,cython==0.29.33,requests,pyjnius,android
 
-android.permissions = INTERNET, RECORD_AUDIO, VIBRATE, WRITE_SETTINGS, READ_SETTINGS, ACCESS_NETWORK_STATE, WAKE_LOCK, FOREGROUND_SERVICE
-android.allow_unknown_sources = True
+# Permissions
+android.permissions = INTERNET,RECORD_AUDIO,VIBRATE,WRITE_SETTINGS,READ_SETTINGS,ACCESS_NETWORK_STATE,WAKE_LOCK,FOREGROUND_SERVICE
+
+# Android API / SDK / NDK
 android.api = 33
 android.minapi = 21
 android.sdk = 33
 android.ndk = 25b
-android.skip_update = False
-android.accept_sdk_license = True
+
+# Architectures
 android.archs = arm64-v8a
 
-# THE MAGIC BULLET: Force stable master branch to prevent Python 3.14 download
-p4a.branch = master
+# Accept SDK license automatically
+android.accept_sdk_license = True
+
+# Keep SDK update enabled
+android.skip_update = False
+
+# Stable python-for-android version
 p4a.version = 2024.01.21
 
+# Logging
 log_level = 2
 warn_on_root = 0
 
+
 [buildozer]
+
 log_level = 2
 warn_on_root = 0
