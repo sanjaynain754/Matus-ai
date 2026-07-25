@@ -1,0 +1,5 @@
+# Matus AI - Dependencies
+kivy==2.3.0
+requests==2.31.0
+buildozer==1.5.0
+cython==0.29.33

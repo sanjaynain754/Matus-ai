@@ -1,0 +1,28 @@
+# Build artifacts
+bin/
+.buildozer/
+__pycache__/
+*.pyc
+
+# IDE
+.vscode/
+.idea/
+
+# Python
+*.egg-info/
+.eggs/
+*.egg
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# node_modules (if needed)
+node_modules/
+
+# Buildozer
+*.keystore
+*.p8
