@@ -14,7 +14,7 @@ from pathlib import Path
 from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
-from matufs-ai_models.cli.subcommand import Subcommand
+from matuss-ai_models.cli.subcommand import Subcommand
 
 
 @dataclass
@@ -27,13 +27,13 @@ class VerificationResult:
 
 
 class VerifyDownload(Subcommand):
-    """Matufs AI cli for verifying downloaded model files"""
+    """Matuss AI cli for verifying downloaded model files"""
 
     def __init__(self, subparsers: argparse._SubParsersAction):
         super().__init__()
         self.parser = subparsers.add_parser(
             "verify-download",
-            prog="matufs-ai verify-download",
+            prog="matuss-ai verify-download",
             description="Verify integrity of downloaded model files",
             formatter_class=argparse.RawTextHelpFormatter,
         )
@@ -105,7 +105,7 @@ def verify_files(model_dir: Path, checksums: dict[str, str], console: Console) -
 
 
 def run_verify_cmd(args: argparse.Namespace, parser: argparse.ArgumentParser):
-    from matufs-ai_models.utils.model_utils import model_local_dir
+    from matuss-ai_models.utils.model_utils import model_local_dir
 
     console = Console()
     model_dir = Path(model_local_dir(args.model_id))

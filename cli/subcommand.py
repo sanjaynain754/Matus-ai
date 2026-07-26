@@ -7,7 +7,7 @@
 
 
 class Subcommand:
-    """All matufs-ai cli subcommands must inherit from this class"""
+    """All matuss-ai cli subcommands must inherit from this class"""
 
     def __init__(self, *args, **kwargs):
         pass

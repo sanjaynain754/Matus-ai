@@ -9,20 +9,20 @@ import argparse
 import os
 import shutil
 
-from matufs-ai_models.cli.subcommand import Subcommand
-from matufs-ai_models.utils.config import DEFAULT_CHECKPOINT_DIR
-from matufs-ai_models.sku_list import resolve_model
+from matuss-ai_models.cli.subcommand import Subcommand
+from matuss-ai_models.utils.config import DEFAULT_CHECKPOINT_DIR
+from matuss-ai_models.sku_list import resolve_model
 
 
 class Remove(Subcommand):
-    """Remove the downloaded matufs-ai model"""
+    """Remove the downloaded matuss-ai model"""
 
     def __init__(self, subparsers: argparse._SubParsersAction):
         super().__init__()
         self.parser = subparsers.add_parser(
             "remove",
-            prog="matufs-ai-model remove",
-            description="Remove the downloaded matufs-ai model",
+            prog="matuss-ai-model remove",
+            description="Remove the downloaded matuss-ai model",
             formatter_class=argparse.RawTextHelpFormatter,
         )
         self._add_arguments()
@@ -33,17 +33,17 @@ class Remove(Subcommand):
             "-m",
             "--model",
             required=True,
-            help="Specify the matufs-ai downloaded model name, see `matufs-ai-model list --downloaded`",
+            help="Specify the matuss-ai downloaded model name, see `matuss-ai-model list --downloaded`",
         )
         self.parser.add_argument(
             "-f",
             "--force",
             action="store_true",
-            help="Used to forcefully remove the matufs-ai model from the storage without further confirmation",
+            help="Used to forcefully remove the matuss-ai model from the storage without further confirmation",
         )
 
     def _run_model_remove_cmd(self, args: argparse.Namespace) -> None:
-        from matufs-ai_models.cli.safety_models import prompt_guard_model_sku_map
+        from matuss-ai_models.cli.safety_models import prompt_guard_model_sku_map
 
         prompt_guard_model_map = prompt_guard_model_sku_map()
 
@@ -55,7 +55,7 @@ class Remove(Subcommand):
         model_path = os.path.join(DEFAULT_CHECKPOINT_DIR, args.model.replace(":", "-"))
 
         if model is None or not os.path.isdir(model_path):
-            print(f"'{args.model}' is not a valid matufs-ai model or does not exist.")
+            print(f"'{args.model}' is not a valid matuss-ai model or does not exist.")
             return
 
         if args.force:
