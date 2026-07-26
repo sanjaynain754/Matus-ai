@@ -10,26 +10,26 @@ import textwrap
 from io import StringIO
 from pathlib import Path
 
-from matuss-ai_models.cli.subcommand import Subcommand
-from matuss-ai_models.cli.table import print_table
-from matuss-ai_models.sku_types import CoreModelId, ModelFamily, is_multimodal, model_family
+from matus-ai_models.cli.subcommand import Subcommand
+from matus-ai_models.cli.table import print_table
+from matus-ai_models.sku_types import CoreModelId, ModelFamily, is_multimodal, model_family
 
 ROOT_DIR = Path(__file__).parent.parent.parent
 
 
 class PromptFormat(Subcommand):
-    """Matuss AI model cli for describe a model prompt format (message formats)"""
+    """matus-ai model cli for describe a model prompt format (message formats)"""
 
     def __init__(self, subparsers: argparse._SubParsersAction):
         super().__init__()
         self.parser = subparsers.add_parser(
             "prompt-format",
-            prog="matuss-ai-model prompt-format",
-            description="Show matuss-ai model message formats",
+            prog="matus-ai-model prompt-format",
+            description="Show matus-ai model message formats",
             epilog=textwrap.dedent(
                 """
                 Example:
-                    matuss-ai model prompt-format <options>
+                    matus-ai model prompt-format <options>
                 """
             ),
             formatter_class=argparse.RawTextHelpFormatter,
@@ -42,8 +42,8 @@ class PromptFormat(Subcommand):
             "-m",
             "--model-name",
             type=str,
-            help="Example: Matuss AI3.1-8B or Matuss AI3.2-11B-Vision, etc\n"
-            "(Run `matuss-ai-model list` to see a list of valid model names)",
+            help="Example: matus-ai3.1-8B or matus-ai3.2-11B-Vision, etc\n"
+            "(Run `matus-ai-model list` to see a list of valid model names)",
         )
         self.parser.add_argument(
             "-l",
@@ -55,9 +55,9 @@ class PromptFormat(Subcommand):
     def _run_model_template_cmd(self, args: argparse.Namespace) -> None:
         import importlib.resources
 
-        # Only Matuss AI 3.1 and 3.2 are supported
+        # Only matus-ai 3.1 and 3.2 are supported
         supported_model_ids = [
-            m for m in CoreModelId if model_family(m) in {ModelFamily.matuss-ai3_1, ModelFamily.matuss-ai3_2}
+            m for m in CoreModelId if model_family(m) in {ModelFamily.matus-ai3_1, ModelFamily.matus-ai3_2}
         ]
 
         model_list = [m.value for m in supported_model_ids]
@@ -83,27 +83,27 @@ class PromptFormat(Subcommand):
         except ValueError:
             self.parser.error(
                 f"{args.model_name} is not a valid Model. Choose one from the list of valid models. "
-                f"Run `matuss-ai-model list` to see the valid model names."
+                f"Run `matus-ai-model list` to see the valid model names."
             )
 
         if model_id not in supported_model_ids:
             self.parser.error(
                 f"{model_id} is not a valid Model. Choose one from the list of valid models. "
-                f"Run `matuss-ai-model list` to see the valid model names."
+                f"Run `matus-ai-model list` to see the valid model names."
             )
 
-        matuss-ai_3_1_file = ROOT_DIR / "matuss-ai3_1" / "prompt_format.md"
-        matuss-ai_3_2_text_file = ROOT_DIR / "matuss-ai3_2" / "text_prompt_format.md"
-        matuss-ai_3_2_vision_file = ROOT_DIR / "matuss-ai3_2" / "vision_prompt_format.md"
-        if model_family(model_id) == ModelFamily.matuss-ai3_1:
-            with importlib.resources.as_file(matuss-ai_3_1_file) as f:
+        matus-ai_3_1_file = ROOT_DIR / "matus-ai3_1" / "prompt_format.md"
+        matus-ai_3_2_text_file = ROOT_DIR / "matus-ai3_2" / "text_prompt_format.md"
+        matus-ai_3_2_vision_file = ROOT_DIR / "matus-ai3_2" / "vision_prompt_format.md"
+        if model_family(model_id) == ModelFamily.matus-ai3_1:
+            with importlib.resources.as_file(matus-ai_3_1_file) as f:
                 content = f.open("r").read()
-        elif model_family(model_id) == ModelFamily.matuss-ai3_2:
+        elif model_family(model_id) == ModelFamily.matus-ai3_2:
             if is_multimodal(model_id):
-                with importlib.resources.as_file(matuss-ai_3_2_vision_file) as f:
+                with importlib.resources.as_file(matus-ai_3_2_vision_file) as f:
                     content = f.open("r").read()
             else:
-                with importlib.resources.as_file(matuss-ai_3_2_text_file) as f:
+                with importlib.resources.as_file(matus-ai_3_2_text_file) as f:
                     content = f.open("r").read()
 
         render_markdown_to_pager(content)

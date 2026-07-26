@@ -10,10 +10,10 @@ import os
 import time
 from pathlib import Path
 
-from matuss-ai_models.cli.subcommand import Subcommand
-from matuss-ai_models.cli.table import print_table
-from matuss-ai_models.utils.config import DEFAULT_CHECKPOINT_DIR
-from matuss-ai_models.sku_list import all_registered_models
+from matus-ai_models.cli.subcommand import Subcommand
+from matus-ai_models.cli.table import print_table
+from matus-ai_models.utils.config import DEFAULT_CHECKPOINT_DIR
+from matus-ai_models.sku_list import all_registered_models
 
 
 def _get_model_size(model_dir):
@@ -52,14 +52,14 @@ def _run_model_list_downloaded_cmd() -> None:
 
 
 class List(Subcommand):
-    """List available matuss-ai models"""
+    """List available matus-ai models"""
 
     def __init__(self, subparsers: argparse._SubParsersAction):
         super().__init__()
         self.parser = subparsers.add_parser(
             "list",
-            prog="matuss-ai-model list",
-            description="Show available matuss-ai models",
+            prog="matus-ai-model list",
+            description="Show available matus-ai models",
             formatter_class=argparse.RawTextHelpFormatter,
         )
         self._add_arguments()
@@ -85,7 +85,7 @@ class List(Subcommand):
         )
 
     def _run_model_list_cmd(self, args: argparse.Namespace) -> None:
-        from matuss-ai_models.cli.safety_models import prompt_guard_model_skus
+        from matus-ai_models.cli.safety_models import prompt_guard_model_skus
 
         if args.downloaded:
             return _run_model_list_downloaded_cmd()

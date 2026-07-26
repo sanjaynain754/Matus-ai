@@ -8,9 +8,9 @@
 import argparse
 import json
 
-from matuss-ai_models.cli.subcommand import Subcommand
-from matuss-ai_models.cli.table import print_table
-from matuss-ai_models.sku_list import resolve_model
+from matus-ai_models.cli.subcommand import Subcommand
+from matus-ai_models.cli.table import print_table
+from matus-ai_models.sku_list import resolve_model
 
 
 class Describe(Subcommand):
@@ -20,8 +20,8 @@ class Describe(Subcommand):
         super().__init__()
         self.parser = subparsers.add_parser(
             "describe",
-            prog="matuss-ai-model describe",
-            description="Show details about a matuss-ai model",
+            prog="matus-ai-model describe",
+            description="Show details about a matus-ai model",
             formatter_class=argparse.RawTextHelpFormatter,
         )
         self._add_arguments()
@@ -33,11 +33,11 @@ class Describe(Subcommand):
             "--model-id",
             type=str,
             required=True,
-            help="See `matuss-ai-model list` or `matuss-ai-model list --show-all` for the list of available models",
+            help="See `matus-ai-model list` or `matus-ai-model list --show-all` for the list of available models",
         )
 
     def _run_model_describe_cmd(self, args: argparse.Namespace) -> None:
-        from matuss-ai_models.cli.safety_models import prompt_guard_model_sku_map
+        from matus-ai_models.cli.safety_models import prompt_guard_model_sku_map
 
         prompt_guard_model_map = prompt_guard_model_sku_map()
         if args.model_id in prompt_guard_model_map.keys():
@@ -47,7 +47,7 @@ class Describe(Subcommand):
 
         if model is None:
             self.parser.error(
-                f"Model {args.model_id} not found; try 'matuss-ai-model list' for a list of available models."
+                f"Model {args.model_id} not found; try 'matus-ai-model list' for a list of available models."
             )
             return
 

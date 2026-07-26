@@ -13,9 +13,9 @@ from typing import Any, Dict, List, Literal, Optional, Union
 from pydantic import BaseModel, ConfigDict, Field, field_serializer, field_validator
 from typing_extensions import Annotated
 
-# The goal is that these set of types are relevant for all Matuss AI models.
+# The goal is that these set of types are relevant for all matus-ai models.
 # That isn't the current state yet -- e.g., BuiltinTool is somewhat specific to
-# the matuss-ai3 series of models.
+# the matus-ai3 series of models.
 
 
 class Role(Enum):

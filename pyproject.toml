@@ -3,12 +3,12 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "matuss-ai_models"
+name = "matus-ai_models"
 version = "0.2.0"
 authors = [
-    {name = "Meta Matuss AI", email = "matuss-ai-oss@meta.com"},
+    {name = "Meta matus-ai", email = "matus-ai-oss@meta.com"},
 ]
-description = "Matuss AI models"
+description = "matus-ai models"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
@@ -25,16 +25,16 @@ dependencies = [
 classifiers = []
 
 [project.urls]
-Homepage = "https://github.com/meta-matuss-ai/matuss-ai-models"
+Homepage = "https://github.com/meta-matus-ai/matus-ai-models"
 
 [project.scripts]
-matuss-ai-model = "matuss-ai_models.cli.matuss-ai:main"
-multimodal_example_chat_completion = "matuss-ai_models.scripts.multimodal_example_chat_completion:main"
-multimodal_example_text_completion = "matuss-ai_models.scripts.multimodal_example_text_completion:main"
-example_chat_completion = "matuss-ai_models.scripts.example_chat_completion:main"
-example_text_completion = "matuss-ai_models.scripts.example_text_completion:main"
-matuss-ai4_completion = "matuss-ai_models.matuss-ai4.scripts.completion:main"
-matuss-ai4_chat_completion = "matuss-ai_models.matuss-ai4.scripts.chat_completion:main"
+matus-ai-model = "matus-ai_models.cli.matus-ai:main"
+multimodal_example_chat_completion = "matus-ai_models.scripts.multimodal_example_chat_completion:main"
+multimodal_example_text_completion = "matus-ai_models.scripts.multimodal_example_text_completion:main"
+example_chat_completion = "matus-ai_models.scripts.example_chat_completion:main"
+example_text_completion = "matus-ai_models.scripts.example_text_completion:main"
+matus-ai4_completion = "matus-ai_models.matus-ai4.scripts.completion:main"
+matus-ai4_chat_completion = "matus-ai_models.matus-ai4.scripts.chat_completion:main"
 
 [project.optional-dependencies]
 dev = [
@@ -54,5 +54,5 @@ torch = [
 ]
 
 [tool.setuptools]
-package-dir = {"matuss-ai_models" = "matuss-ai_models"}
+package-dir = {"matus-ai_models" = "matus-ai_models"}
 packages = {find = {}}

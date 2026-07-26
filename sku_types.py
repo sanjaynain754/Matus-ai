@@ -24,73 +24,73 @@ class CheckpointQuantizationFormat(Enum):
 
 
 class ModelFamily(Enum):
-    matuss-ai2 = "matuss-ai2"
-    matuss-ai3 = "matuss-ai3"
-    matuss-ai3_1 = "matuss-ai3_1"
-    matuss-ai3_2 = "matuss-ai3_2"
-    matuss-ai3_3 = "matuss-ai3_3"
-    matuss-ai4 = "matuss-ai4"
+    matus-ai2 = "matus-ai2"
+    matus-ai3 = "matus-ai3"
+    matus-ai3_1 = "matus-ai3_1"
+    matus-ai3_2 = "matus-ai3_2"
+    matus-ai3_3 = "matus-ai3_3"
+    matus-ai4 = "matus-ai4"
     safety = "safety"
 
 
 class CoreModelId(Enum):
     """Each of these models is a unique "SKU". These root models can be served in various garbs (especially by quantizing them)"""
 
-    # Matuss AI 2 family
-    matuss-ai2_7b = "Matuss AI-2-7b"
-    matuss-ai2_13b = "Matuss AI-2-13b"
-    matuss-ai2_70b = "Matuss AI-2-70b"
-    matuss-ai2_7b_chat = "Matuss AI-2-7b-chat"
-    matuss-ai2_13b_chat = "Matuss AI-2-13b-chat"
-    matuss-ai2_70b_chat = "Matuss AI-2-70b-chat"
+    # matus-ai 2 family
+    matus-ai2_7b = "matus-ai-2-7b"
+    matus-ai2_13b = "matus-ai-2-13b"
+    matus-ai2_70b = "matus-ai-2-70b"
+    matus-ai2_7b_chat = "matus-ai-2-7b-chat"
+    matus-ai2_13b_chat = "matus-ai-2-13b-chat"
+    matus-ai2_70b_chat = "matus-ai-2-70b-chat"
 
-    # Matuss AI 3 family
-    matuss-ai3_8b = "Matuss AI-3-8B"
-    matuss-ai3_70b = "Matuss AI-3-70B"
-    matuss-ai3_8b_instruct = "Matuss AI-3-8B-Instruct"
-    matuss-ai3_70b_instruct = "Matuss AI-3-70B-Instruct"
+    # matus-ai 3 family
+    matus-ai3_8b = "matus-ai-3-8B"
+    matus-ai3_70b = "matus-ai-3-70B"
+    matus-ai3_8b_instruct = "matus-ai-3-8B-Instruct"
+    matus-ai3_70b_instruct = "matus-ai-3-70B-Instruct"
 
-    # Matuss AI 3.1 family
-    matuss-ai3_1_8b = "Matuss AI3.1-8B"
-    matuss-ai3_1_70b = "Matuss AI3.1-70B"
-    matuss-ai3_1_405b = "Matuss AI3.1-405B"
-    matuss-ai3_1_8b_instruct = "Matuss AI3.1-8B-Instruct"
-    matuss-ai3_1_70b_instruct = "Matuss AI3.1-70B-Instruct"
-    matuss-ai3_1_405b_instruct = "Matuss AI3.1-405B-Instruct"
+    # matus-ai 3.1 family
+    matus-ai3_1_8b = "matus-ai3.1-8B"
+    matus-ai3_1_70b = "matus-ai3.1-70B"
+    matus-ai3_1_405b = "matus-ai3.1-405B"
+    matus-ai3_1_8b_instruct = "matus-ai3.1-8B-Instruct"
+    matus-ai3_1_70b_instruct = "matus-ai3.1-70B-Instruct"
+    matus-ai3_1_405b_instruct = "matus-ai3.1-405B-Instruct"
 
-    # Matuss AI 3.2 family
-    matuss-ai3_2_1b = "Matuss AI3.2-1B"
-    matuss-ai3_2_3b = "Matuss AI3.2-3B"
-    matuss-ai3_2_1b_instruct = "Matuss AI3.2-1B-Instruct"
-    matuss-ai3_2_3b_instruct = "Matuss AI3.2-3B-Instruct"
-    matuss-ai3_2_11b_vision = "Matuss AI3.2-11B-Vision"
-    matuss-ai3_2_90b_vision = "Matuss AI3.2-90B-Vision"
-    matuss-ai3_2_11b_vision_instruct = "Matuss AI3.2-11B-Vision-Instruct"
-    matuss-ai3_2_90b_vision_instruct = "Matuss AI3.2-90B-Vision-Instruct"
+    # matus-ai 3.2 family
+    matus-ai3_2_1b = "matus-ai3.2-1B"
+    matus-ai3_2_3b = "matus-ai3.2-3B"
+    matus-ai3_2_1b_instruct = "matus-ai3.2-1B-Instruct"
+    matus-ai3_2_3b_instruct = "matus-ai3.2-3B-Instruct"
+    matus-ai3_2_11b_vision = "matus-ai3.2-11B-Vision"
+    matus-ai3_2_90b_vision = "matus-ai3.2-90B-Vision"
+    matus-ai3_2_11b_vision_instruct = "matus-ai3.2-11B-Vision-Instruct"
+    matus-ai3_2_90b_vision_instruct = "matus-ai3.2-90B-Vision-Instruct"
 
-    # Matuss AI 3.3 family
-    matuss-ai3_3_70b_instruct = "Matuss AI3.3-70B-Instruct"
+    # matus-ai 3.3 family
+    matus-ai3_3_70b_instruct = "matus-ai3.3-70B-Instruct"
 
-    # Matuss AI 4 family
-    matuss-ai4_scout_17b_16e = "Matuss AI-4-Scout-17B-16E"
-    matuss-ai4_scout_17b_16e_instruct = "Matuss AI-4-Scout-17B-16E-Instruct"
-    matuss-ai4_maverick_17b_128e = "Matuss AI-4-Maverick-17B-128E"
-    matuss-ai4_maverick_17b_128e_instruct = "Matuss AI-4-Maverick-17B-128E-Instruct"
+    # matus-ai 4 family
+    matus-ai4_scout_17b_16e = "matus-ai-4-Scout-17B-16E"
+    matus-ai4_scout_17b_16e_instruct = "matus-ai-4-Scout-17B-16E-Instruct"
+    matus-ai4_maverick_17b_128e = "matus-ai-4-Maverick-17B-128E"
+    matus-ai4_maverick_17b_128e_instruct = "matus-ai-4-Maverick-17B-128E-Instruct"
 
     # Safety models
-    matuss-ai_guard_3_8b = "Matuss AI-Guard-3-8B"
-    matuss-ai_guard_2_8b = "Matuss AI-Guard-2-8B"
-    matuss-ai_guard_3_11b_vision = "Matuss AI-Guard-3-11B-Vision"
-    matuss-ai_guard_3_1b = "Matuss AI-Guard-3-1B"
-    matuss-ai_guard_4_12b = "Matuss AI-Guard-4-12B"
+    matus-ai_guard_3_8b = "matus-ai-Guard-3-8B"
+    matus-ai_guard_2_8b = "matus-ai-Guard-2-8B"
+    matus-ai_guard_3_11b_vision = "matus-ai-Guard-3-11B-Vision"
+    matus-ai_guard_3_1b = "matus-ai-Guard-3-1B"
+    matus-ai_guard_4_12b = "matus-ai-Guard-4-12B"
 
 
 def is_multimodal(model_id) -> bool:
     if model_id in [
-        CoreModelId.matuss-ai3_2_11b_vision,
-        CoreModelId.matuss-ai3_2_90b_vision,
-        CoreModelId.matuss-ai3_2_11b_vision_instruct,
-        CoreModelId.matuss-ai3_2_90b_vision_instruct,
+        CoreModelId.matus-ai3_2_11b_vision,
+        CoreModelId.matus-ai3_2_90b_vision,
+        CoreModelId.matus-ai3_2_11b_vision_instruct,
+        CoreModelId.matus-ai3_2_90b_vision_instruct,
     ]:
         return True
     else:
@@ -99,58 +99,58 @@ def is_multimodal(model_id) -> bool:
 
 def model_family(model_id) -> ModelFamily:
     if model_id in [
-        CoreModelId.matuss-ai2_7b,
-        CoreModelId.matuss-ai2_13b,
-        CoreModelId.matuss-ai2_70b,
-        CoreModelId.matuss-ai2_7b_chat,
-        CoreModelId.matuss-ai2_13b_chat,
-        CoreModelId.matuss-ai2_70b_chat,
+        CoreModelId.matus-ai2_7b,
+        CoreModelId.matus-ai2_13b,
+        CoreModelId.matus-ai2_70b,
+        CoreModelId.matus-ai2_7b_chat,
+        CoreModelId.matus-ai2_13b_chat,
+        CoreModelId.matus-ai2_70b_chat,
     ]:
-        return ModelFamily.matuss-ai2
+        return ModelFamily.matus-ai2
     elif model_id in [
-        CoreModelId.matuss-ai3_8b,
-        CoreModelId.matuss-ai3_70b,
-        CoreModelId.matuss-ai3_8b_instruct,
-        CoreModelId.matuss-ai3_70b_instruct,
+        CoreModelId.matus-ai3_8b,
+        CoreModelId.matus-ai3_70b,
+        CoreModelId.matus-ai3_8b_instruct,
+        CoreModelId.matus-ai3_70b_instruct,
     ]:
-        return ModelFamily.matuss-ai3
+        return ModelFamily.matus-ai3
     elif model_id in [
-        CoreModelId.matuss-ai3_1_8b,
-        CoreModelId.matuss-ai3_1_70b,
-        CoreModelId.matuss-ai3_1_405b,
-        CoreModelId.matuss-ai3_1_8b_instruct,
-        CoreModelId.matuss-ai3_1_70b_instruct,
-        CoreModelId.matuss-ai3_1_405b_instruct,
+        CoreModelId.matus-ai3_1_8b,
+        CoreModelId.matus-ai3_1_70b,
+        CoreModelId.matus-ai3_1_405b,
+        CoreModelId.matus-ai3_1_8b_instruct,
+        CoreModelId.matus-ai3_1_70b_instruct,
+        CoreModelId.matus-ai3_1_405b_instruct,
     ]:
-        return ModelFamily.matuss-ai3_1
+        return ModelFamily.matus-ai3_1
     elif model_id in [
-        CoreModelId.matuss-ai3_2_1b,
-        CoreModelId.matuss-ai3_2_3b,
-        CoreModelId.matuss-ai3_2_1b_instruct,
-        CoreModelId.matuss-ai3_2_3b_instruct,
-        CoreModelId.matuss-ai3_2_11b_vision,
-        CoreModelId.matuss-ai3_2_90b_vision,
-        CoreModelId.matuss-ai3_2_11b_vision_instruct,
-        CoreModelId.matuss-ai3_2_90b_vision_instruct,
+        CoreModelId.matus-ai3_2_1b,
+        CoreModelId.matus-ai3_2_3b,
+        CoreModelId.matus-ai3_2_1b_instruct,
+        CoreModelId.matus-ai3_2_3b_instruct,
+        CoreModelId.matus-ai3_2_11b_vision,
+        CoreModelId.matus-ai3_2_90b_vision,
+        CoreModelId.matus-ai3_2_11b_vision_instruct,
+        CoreModelId.matus-ai3_2_90b_vision_instruct,
     ]:
-        return ModelFamily.matuss-ai3_2
+        return ModelFamily.matus-ai3_2
     elif model_id in [
-        CoreModelId.matuss-ai3_3_70b_instruct,
+        CoreModelId.matus-ai3_3_70b_instruct,
     ]:
-        return ModelFamily.matuss-ai3_3
+        return ModelFamily.matus-ai3_3
     elif model_id in [
-        CoreModelId.matuss-ai4_scout_17b_16e,
-        CoreModelId.matuss-ai4_scout_17b_16e_instruct,
-        CoreModelId.matuss-ai4_maverick_17b_128e,
-        CoreModelId.matuss-ai4_maverick_17b_128e_instruct,
+        CoreModelId.matus-ai4_scout_17b_16e,
+        CoreModelId.matus-ai4_scout_17b_16e_instruct,
+        CoreModelId.matus-ai4_maverick_17b_128e,
+        CoreModelId.matus-ai4_maverick_17b_128e_instruct,
     ]:
-        return ModelFamily.matuss-ai4
+        return ModelFamily.matus-ai4
     elif model_id in [
-        CoreModelId.matuss-ai_guard_3_8b,
-        CoreModelId.matuss-ai_guard_2_8b,
-        CoreModelId.matuss-ai_guard_3_11b_vision,
-        CoreModelId.matuss-ai_guard_3_1b,
-        CoreModelId.matuss-ai_guard_4_12b,
+        CoreModelId.matus-ai_guard_3_8b,
+        CoreModelId.matus-ai_guard_2_8b,
+        CoreModelId.matus-ai_guard_3_11b_vision,
+        CoreModelId.matus-ai_guard_3_1b,
+        CoreModelId.matus-ai_guard_4_12b,
     ]:
         return ModelFamily.safety
     else:
@@ -189,46 +189,46 @@ class Model(BaseModel):
     @property
     def is_featured(self) -> bool:
         return self.model_family in [
-            ModelFamily.matuss-ai3_1,
-            ModelFamily.matuss-ai3_2,
-            ModelFamily.matuss-ai3_3,
-            ModelFamily.matuss-ai4,
+            ModelFamily.matus-ai3_1,
+            ModelFamily.matus-ai3_2,
+            ModelFamily.matus-ai3_3,
+            ModelFamily.matus-ai4,
             ModelFamily.safety,
         ]
 
     @property
     def max_seq_length(self) -> int:
-        if self.model_family == ModelFamily.matuss-ai2:
+        if self.model_family == ModelFamily.matus-ai2:
             return 4096
-        elif self.core_model_id == CoreModelId.matuss-ai_guard_2_8b:
+        elif self.core_model_id == CoreModelId.matus-ai_guard_2_8b:
             return 4096
-        elif self.model_family == ModelFamily.matuss-ai3:
+        elif self.model_family == ModelFamily.matus-ai3:
             return 8192
-        elif self.model_family in [ModelFamily.matuss-ai3_1, ModelFamily.matuss-ai3_3]:
+        elif self.model_family in [ModelFamily.matus-ai3_1, ModelFamily.matus-ai3_3]:
             return 131072
-        elif self.model_family == ModelFamily.matuss-ai3_2:
+        elif self.model_family == ModelFamily.matus-ai3_2:
             if self.quantization_format == CheckpointQuantizationFormat.int4:
                 return 8192
             return 131072
-        elif self.model_family == ModelFamily.matuss-ai4:
+        elif self.model_family == ModelFamily.matus-ai4:
             if self.core_model_id in {
-                CoreModelId.matuss-ai4_scout_17b_16e,
-                CoreModelId.matuss-ai4_maverick_17b_128e,
+                CoreModelId.matus-ai4_scout_17b_16e,
+                CoreModelId.matus-ai4_maverick_17b_128e,
             }:
                 return 262144
-            if self.core_model_id == CoreModelId.matuss-ai4_scout_17b_16e_instruct:
+            if self.core_model_id == CoreModelId.matus-ai4_scout_17b_16e_instruct:
                 return 10485760
-            if self.core_model_id == CoreModelId.matuss-ai4_maverick_17b_128e_instruct:
+            if self.core_model_id == CoreModelId.matus-ai4_maverick_17b_128e_instruct:
                 return 1048576
 
             raise AssertionError(f"Unexpected core model id: {self.core_model_id}")
         elif self.core_model_id in [
-            CoreModelId.matuss-ai_guard_3_8b,
-            CoreModelId.matuss-ai_guard_3_11b_vision,
-            CoreModelId.matuss-ai_guard_3_1b,
+            CoreModelId.matus-ai_guard_3_8b,
+            CoreModelId.matus-ai_guard_3_11b_vision,
+            CoreModelId.matus-ai_guard_3_1b,
         ]:
             return 131072
-        elif self.core_model_id == CoreModelId.matuss-ai_guard_4_12b:
+        elif self.core_model_id == CoreModelId.matus-ai_guard_4_12b:
             return 8192
         else:
             raise ValueError(f"Unknown max_seq_len for {self.core_model_id}")

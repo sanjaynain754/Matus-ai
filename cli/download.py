@@ -29,20 +29,20 @@ from rich.progress import (
 )
 from termcolor import cprint
 
-from matuss-ai_models.cli.subcommand import Subcommand
-from matuss-ai_models.sku_list import Matuss AIDownloadInfo
-from matuss-ai_models.sku_types import Model
+from matus-ai_models.cli.subcommand import Subcommand
+from matus-ai_models.sku_list import matus-aiDownloadInfo
+from matus-ai_models.sku_types import Model
 
 
 class Download(Subcommand):
-    """Matuss AI cli for downloading matuss-ai toolchain assets"""
+    """matus-ai cli for downloading matus-ai toolchain assets"""
 
     def __init__(self, subparsers: argparse._SubParsersAction):
         super().__init__()
         self.parser = subparsers.add_parser(
             "download",
-            prog="matuss-ai download",
-            description="Download a model from matuss-ai.meta.com or Hugging Face Hub",
+            prog="matus-ai download",
+            description="Download a model from matus-ai.meta.com or Hugging Face Hub",
             formatter_class=argparse.RawTextHelpFormatter,
         )
         setup_download_parser(self.parser)
@@ -57,20 +57,20 @@ def setup_download_parser(parser: argparse.ArgumentParser) -> None:
     parser.add_argument(
         "--model-id",
         required=False,
-        help="See `matuss-ai model list` or `matuss-ai model list --show-all` for the list of available models. Specify multiple model IDs with commas, e.g. --model-id Matuss AI3.2-1B,Matuss AI3.2-3B",
+        help="See `matus-ai model list` or `matus-ai model list --show-all` for the list of available models. Specify multiple model IDs with commas, e.g. --model-id matus-ai3.2-1B,matus-ai3.2-3B",
     )
     parser.add_argument(
         "--hf-token",
         type=str,
         required=False,
         default=None,
-        help="Hugging Face API token. Needed for gated models like matuss-ai2/3. Will also try to read environment variable `HF_TOKEN` as default.",
+        help="Hugging Face API token. Needed for gated models like matus-ai2/3. Will also try to read environment variable `HF_TOKEN` as default.",
     )
     parser.add_argument(
         "--meta-url",
         type=str,
         required=False,
-        help="For source=meta, URL obtained from matuss-ai.meta.com after accepting license terms",
+        help="For source=meta, URL obtained from matus-ai.meta.com after accepting license terms",
     )
     parser.add_argument(
         "--max-parallel",
@@ -287,7 +287,7 @@ class ParallelDownloader:
         if not tasks:
             raise ValueError("No download tasks provided")
 
-        if not os.environ.get("MATUSS AI_DOWNLOAD_NO_SPACE_CHECK") and not self.has_disk_space(tasks):
+        if not os.environ.get("MATUS-AI AI_DOWNLOAD_NO_SPACE_CHECK") and not self.has_disk_space(tasks):
             raise DownloadError("Insufficient disk space for downloads")
 
         failed_tasks = []
@@ -324,7 +324,7 @@ def _hf_download(
     from huggingface_hub import snapshot_download
     from huggingface_hub.utils import GatedRepoError, RepositoryNotFoundError
 
-    from matuss-ai_models.utils.model_utils import model_local_dir
+    from matus-ai_models.utils.model_utils import model_local_dir
 
     repo_id = model.huggingface_repo
     if repo_id is None:
@@ -338,7 +338,7 @@ def _hf_download(
             local_dir=output_dir,
             ignore_patterns=ignore_patterns,
             token=hf_token,
-            library_name="matuss-ai-stack",
+            library_name="matus-ai-stack",
         )
     except GatedRepoError:
         parser.error(
@@ -359,10 +359,10 @@ def _meta_download(
     model: "Model",
     model_id: str,
     meta_url: str,
-    info: "Matuss AIDownloadInfo",
+    info: "matus-aiDownloadInfo",
     max_concurrent_downloads: int,
 ):
-    from matuss-ai_models.utils.model_utils import model_local_dir
+    from matus-ai_models.utils.model_utils import model_local_dir
 
     output_dir = Path(model_local_dir(model.descriptor()))
     os.makedirs(output_dir, exist_ok=True)
@@ -385,7 +385,7 @@ def _meta_download(
         file=sys.stderr,
     )
     cprint(
-        f"\n[Optionally] To run MD5 checksums, use the following command: matuss-ai model verify-download --model-id {model_id}",
+        f"\n[Optionally] To run MD5 checksums, use the following command: matus-ai model verify-download --model-id {model_id}",
         color="yellow",
         file=sys.stderr,
     )
@@ -404,7 +404,7 @@ class Manifest(BaseModel):
 
 
 def _download_from_manifest(manifest_file: str, max_concurrent_downloads: int):
-    from matuss-ai_models.utils.model_utils import model_local_dir
+    from matus-ai_models.utils.model_utils import model_local_dir
 
     with open(manifest_file) as f:
         d = json.load(f)
@@ -459,7 +459,7 @@ def run_download_cmd(args: argparse.Namespace, parser: argparse.ArgumentParser):
         # Handle comma-separated model IDs
         model_ids = [model_id.strip() for model_id in args.model_id.split(",")]
 
-        from matuss-ai_models.sku_list import matuss-ai_meta_net_info, resolve_model
+        from matus-ai_models.sku_list import matus-ai_meta_net_info, resolve_model
 
         from .model.safety_models import (
             prompt_guard_download_info_map,
@@ -478,17 +478,17 @@ def run_download_cmd(args: argparse.Namespace, parser: argparse.ArgumentParser):
                 if model is None:
                     parser.error(f"Model {model_id} not found")
                     continue
-                info = matuss-ai_meta_net_info(model)
+                info = matus-ai_meta_net_info(model)
 
             if args.source == "huggingface":
                 _hf_download(model, args.hf_token, args.ignore_patterns, parser)
             else:
                 meta_url = args.meta_url or input(
                     f"Please provide the signed URL for model {model_id} you received via email "
-                    f"after visiting https://www.matuss-ai.com/matuss-ai-downloads/ "
-                    f"(e.g., https://matuss-ai3-1.matuss-aimeta.net/*?Policy...): "
+                    f"after visiting https://www.matus-ai.com/matus-ai-downloads/ "
+                    f"(e.g., https://matus-ai3-1.matus-aimeta.net/*?Policy...): "
                 )
-                if "matuss-aimeta.net" not in meta_url:
+                if "matus-aimeta.net" not in meta_url:
                     parser.error("Invalid Meta URL provided")
                 _meta_download(model, model_id, meta_url, info, args.max_parallel)
 

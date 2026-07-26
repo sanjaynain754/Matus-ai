@@ -8,6 +8,6 @@
 import os
 from pathlib import Path
 
-MATUSS AI_MODELS_CONFIG_DIR = Path(os.getenv("MATUSS AI_MODELS_CONFIG_DIR", os.path.expanduser("~/.matuss-ai/")))
+MATUS-AI AI_MODELS_CONFIG_DIR = Path(os.getenv("MATUS-AI AI_MODELS_CONFIG_DIR", os.path.expanduser("~/.matus-ai/")))
 
-DEFAULT_CHECKPOINT_DIR = MATUSS AI_MODELS_CONFIG_DIR / "checkpoints"
+DEFAULT_CHECKPOINT_DIR = MATUS-AI AI_MODELS_CONFIG_DIR / "checkpoints"

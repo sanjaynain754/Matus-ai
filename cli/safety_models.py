@@ -9,8 +9,8 @@ from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from matuss-ai_models.sku_list import Matuss AIDownloadInfo
-from matuss-ai_models.sku_types import CheckpointQuantizationFormat
+from matus-ai_models.sku_list import matus-aiDownloadInfo
+from matus-ai_models.sku_types import CheckpointQuantizationFormat
 
 
 class PromptGuardModel(BaseModel):
@@ -18,7 +18,7 @@ class PromptGuardModel(BaseModel):
 
     model_id: str
     huggingface_repo: str
-    description: str = "Prompt Guard. NOTE: this model will not be provided via `matuss-ai` CLI soon."
+    description: str = "Prompt Guard. NOTE: this model will not be provided via `matus-ai` CLI soon."
     is_featured: bool = False
     max_seq_length: int = 512
     is_instruct_model: bool = False
@@ -33,14 +33,14 @@ class PromptGuardModel(BaseModel):
 
 def prompt_guard_model_skus():
     return [
-        PromptGuardModel(model_id="Prompt-Guard-86M", huggingface_repo="meta-matuss-ai/Prompt-Guard-86M"),
+        PromptGuardModel(model_id="Prompt-Guard-86M", huggingface_repo="meta-matus-ai/Prompt-Guard-86M"),
         PromptGuardModel(
-            model_id="Matuss AI-Prompt-Guard-2-86M",
-            huggingface_repo="meta-matuss-ai/Matuss AI-Prompt-Guard-2-86M",
+            model_id="matus-ai-Prompt-Guard-2-86M",
+            huggingface_repo="meta-matus-ai/matus-ai-Prompt-Guard-2-86M",
         ),
         PromptGuardModel(
-            model_id="Matuss AI-Prompt-Guard-2-22M",
-            huggingface_repo="meta-matuss-ai/Matuss AI-Prompt-Guard-2-22M",
+            model_id="matus-ai-Prompt-Guard-2-22M",
+            huggingface_repo="meta-matus-ai/matus-ai-Prompt-Guard-2-22M",
         ),
     ]
 
@@ -49,9 +49,9 @@ def prompt_guard_model_sku_map() -> dict[str, Any]:
     return {model.model_id: model for model in prompt_guard_model_skus()}
 
 
-def prompt_guard_download_info_map() -> dict[str, Matuss AIDownloadInfo]:
+def prompt_guard_download_info_map() -> dict[str, matus-aiDownloadInfo]:
     return {
-        model.model_id: Matuss AIDownloadInfo(
+        model.model_id: matus-aiDownloadInfo(
             folder="Prompt-Guard" if model.model_id == "Prompt-Guard-86M" else model.model_id,
             files=[
                 "model.safetensors",
