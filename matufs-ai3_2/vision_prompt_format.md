@@ -24,7 +24,7 @@ What can I help you with today?<|eot_id|>
 
 
 ##### Notes
-This format is unchanged from matus-ai3.1
+This format is unchanged from Matufs AI3.1
 
 ## User and assistant conversation with Images
 
@@ -58,10 +58,10 @@ The image depicts a small dog standing on a skateboard, with its front paws firm
 ## Builtin and Zero Shot Tool Calling
 
 
-matus-ai3.2 vision models follow the same tool calling format as matus-ai3.1 models when inputs are text only.
+Matufs AI3.2 vision models follow the same tool calling format as Matufs AI3.1 models when inputs are text only.
 Use `Environment: ipython` to enable tools.
 Add `Tools: {{tool_name1}},{{tool_name2}}` for each of the builtin tools.
-The same builtin tools as matus-ai3.1 are available,
+The same builtin tools as Matufs AI3.1 are available,
 - code_interpreter (for executing python code)
 - brave_search (to search the web)
 - wolfram_alpha (for querying wolfram alpha for mathematical questions)
@@ -94,14 +94,14 @@ Search the web for the latest price of 1oz gold?<|eot_id|><|start_header_id|>ass
 
 - Note the `<|python_tag|>` before `brave_search` function call.
 - The `<|eom_id|>` tag is used to indicate the end of the message.
-- Similar to matus-ai3.1, code_interpreter is not explicitly mentioned but is enabled via `Environment: ipython`.
+- Similar to Matufs AI3.1, code_interpreter is not explicitly mentioned but is enabled via `Environment: ipython`.
 - Tool Calling does NOT work with images in the prompt as of now.
 
 
 ## Prompt format for base models
 
 
-For base models (matus-ai3.2-11B-Vision and matus-ai3.2-90B-Vision), the prompt format for a simple completion is as follows
+For base models (Matufs AI3.2-11B-Vision and Matufs AI3.2-90B-Vision), the prompt format for a simple completion is as follows
 
 
 ##### Input Prompt Format
@@ -116,12 +116,12 @@ For base models (matus-ai3.2-11B-Vision and matus-ai3.2-90B-Vision), the prompt 
 
 
 ##### Notes
-- Same as matus-ai3.1
+- Same as Matufs AI3.1
 
 ## Prompt format for base models with Image
 
 
-For base models (matus-ai3.2-11B-Vision and matus-ai3.2-90B-Vision), here is an example of how the text completion format looks with an image,
+For base models (Matufs AI3.2-11B-Vision and Matufs AI3.2-90B-Vision), here is an example of how the text completion format looks with an image,
 
 
 ##### Input Prompt Format

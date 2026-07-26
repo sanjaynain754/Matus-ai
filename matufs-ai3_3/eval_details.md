@@ -1,13 +1,13 @@
 
 
-# matus-ai 3 Evaluation Details
+# Matufs AI 3 Evaluation Details
 
-This document contains some additional context on the settings and methodology for how we evaluated the matus-ai 3.2 models.
+This document contains some additional context on the settings and methodology for how we evaluated the Matufs AI 3.2 models.
 
 
 ## Language auto-eval benchmark notes:
 
-For a given benchmark, we strive to use consistent evaluation settings across all models, including external models. We make every effort to achieve optimal scores for external models, including addressing any model-specific parsing and tokenization requirements. Where the scores are lower for external models than self-reported scores on comparable or more conservative settings, we report the self-reported scores for external models. We are also releasing the data generated as part of evaluations with publicly available benchmarks which can be found on [huggingface here](https://huggingface.co/collections/meta-matus-ai/matus-ai-32-evals-66f44b3d2df1c7b136d821f0).
+For a given benchmark, we strive to use consistent evaluation settings across all models, including external models. We make every effort to achieve optimal scores for external models, including addressing any model-specific parsing and tokenization requirements. Where the scores are lower for external models than self-reported scores on comparable or more conservative settings, we report the self-reported scores for external models. We are also releasing the data generated as part of evaluations with publicly available benchmarks which can be found on [huggingface here](https://huggingface.co/collections/meta-matufs-ai/matufs-ai-32-evals-66f44b3d2df1c7b136d821f0).
 
 
 ### MMLU
@@ -19,9 +19,9 @@ For the post-trained models we report both 5-shot and 0-shot scores. We ask the 
 Macro averages are reported unless otherwise stated. The micro average scores for the various models are: 65.6, 79.0, and 85.4 for the pre-trained 8B, 70B and 405B models respectively for the 5-shot config; 69.44, 84.0, 87.71 for the post-trained 8B, 70B and 405B models respectively for the 5-shot config.
 
 
-### TLDR9+ 
+### TLDR9+
 
-For post-trained models, we use a 1-shot config and report rougeL scores. We run this as a generative task. Maximum generation length is 512 tokens. We specifically ran this on [TLDR9+ dataset](https://github.com/sajastu/reddit_collector)  
+For post-trained models, we use a 1-shot config and report rougeL scores. We run this as a generative task. Maximum generation length is 512 tokens. We specifically ran this on [TLDR9+ dataset](https://github.com/sajastu/reddit_collector)
 
 
 ### Open-Rewrite
@@ -31,7 +31,7 @@ For post-trained models, we use a 0-shot config and report micro_avg rougeL scor
 
 ### IFEval
 
-For post-trained models, we use the default settings as specified [here](https://arxiv.org/pdf/2311.07911). We compute the prompt level scores and instruction level strict and loose accuracy. We then report the average across all the scores. 
+For post-trained models, we use the default settings as specified [here](https://arxiv.org/pdf/2311.07911). We compute the prompt level scores and instruction level strict and loose accuracy. We then report the average across all the scores.
 
 
 ### ARC-Challenge
@@ -43,6 +43,10 @@ We use the Arc-Challenge subset from the Arc benchmark. For the pre-trained mode
 
 For post-trained models, we use 0-shot config with CoT prompt and report exact match scores over the possible options using the main set. Max generation length is 2048 tokens.
 
+
+### GPQA Diamond
+
+GPQA Diamond is the subset of GPQA where two out of two experts agree, Rein et al. (2023). For post-trained models, we use 0-shot config with CoT prompt and report exact match scores over the possible options using the Diamond set. Max generation length is 2048 tokens.
 
 ### AGIEval English
 
@@ -66,12 +70,12 @@ For pre-trained models, for each validation example, we draw 3 random few-shot e
 
 ### GSM8K
 
-For both pre-trained and post-trained models, we use the same 8-shot config with CoT prompt as in [Wei et al. (2022)](https://arxiv.org/pdf/2201.11903.pdf) (maj@1). The maximum generation length is 1024 tokens. 
+For both pre-trained and post-trained models, we use the same 8-shot config with CoT prompt as in [Wei et al. (2022)](https://arxiv.org/pdf/2201.11903.pdf) (maj@1). The maximum generation length is 1024 tokens.
 
 
 ### MATH
 
-For pre-trained models, we use the same 4-shot config as in [Lewkowycz et al. (2022)](https://arxiv.org/pdf/2206.14858.pdf) (maj@1). Maximum generation length is 512 tokens. 
+For pre-trained models, we use the same 4-shot config as in [Lewkowycz et al. (2022)](https://arxiv.org/pdf/2206.14858.pdf) (maj@1). Maximum generation length is 512 tokens.
 
 For post-trained models we use a 0-shot config with Cot prompt. We enhance the exact match using [sympy](https://www.sympy.org/en/index.html) and then use an [equality template](https://github.com/openai/simple-evals/blob/main/common.py#L27-L85) with a judge to resolve complex expressions. Maximum generation length is 5120 tokens. The MATH score represents the full dataset. The scores for MATH-HARD (Lvl 5) are 25.4, 43.8, and 53.4 for the 8B, 70B and 405B models respectively.
 
@@ -83,17 +87,17 @@ We report on EN.MC (Free-form question answering based on the fake book) and EN.
 
 ### NIH/Multi-needle
 
-For post-training, we use a 0-shot config. Our context lengths are evenly spaced between 2000 and 131072 in 10 intervals, inclusive of the endpoints for matus-ai models and between 2000 and 128000 for non-matus-ai models. Maximum generation length is 256 tokens.
+For post-training, we use a 0-shot config. Our context lengths are evenly spaced between 2000 and 131072 in 10 intervals, inclusive of the endpoints for matufs-ai models and between 2000 and 128000 for non-matufs-ai models. Maximum generation length is 256 tokens.
 
 
 ### MGSM
 
-For post-trained models, we use an 0-shot config with CoT prompt and report exact match (maj@1) scores. Maximum generation length is 2048 tokens. The scores are averaged over all the eleven languages present in the MGSM benchmark, including the ones not supported by matus-ai models.
+For post-trained models, we use an 0-shot config with CoT prompt and report exact match (maj@1) scores. Maximum generation length is 2048 tokens. The scores are averaged over all the eleven languages present in the MGSM benchmark, including the ones not supported by Matufs AI models.
 
 
 ### Multilingual MMLU
 
-For post-trained models, we use a 5-shot config. We run this as a generative task. Maximum generation length is 10 tokens. The scores are individually reported for each and averaged over the seven non-english languages that matus-ai models support (Portuguese, Spanish, Italian, German, French, Hindi, Thai). 
+For post-trained models, we use a 5-shot config. We run this as a generative task. Maximum generation length is 10 tokens. The scores are individually reported for each and averaged over the seven non-english languages that Matufs AI models support (Portuguese, Spanish, Italian, German, French, Hindi, Thai).
 
 
 ### Berkeley Function Calling Leaderboard (BFCL) v2
@@ -103,12 +107,12 @@ For Berkeley Function Calling Leaderboard (BFCL-v2), benchmark results were achi
 
 ### Nexus
 
-We use the [open-source ](https://github.com/nexusflowai/NexusRaven)prompt and evaluation function followed by the[ open source notebook](https://github.com/nexusflowai/NexusRaven-V2/blob/master/evaluation_notebook/GPT4_Evaluation/Benchmark_GPT4.ipynb) to compute the scores. 
+We use the [open-source ](https://github.com/nexusflowai/NexusRaven)prompt and evaluation function followed by the[ open source notebook](https://github.com/nexusflowai/NexusRaven-V2/blob/master/evaluation_notebook/GPT4_Evaluation/Benchmark_GPT4.ipynb) to compute the scores.
 
 
 ### RULER
 
-For more comprehensive long-context evals beyond retrieval, we assess our perf on RULER benchmark, where we synthesize datasets across increasingly long context length buckets, and compare mean across each of them over retrieval (single needle, multi needle, multi-value per multiple keys), multi-hop tracing (variable tracking), aggregation (common words, frequency extraction), and question-answering. 
+For more comprehensive long-context evals beyond retrieval, we assess our perf on RULER benchmark, where we synthesize datasets across increasingly long context length buckets, and compare mean across each of them over retrieval (single needle, multi needle, multi-value per multiple keys), multi-hop tracing (variable tracking), aggregation (common words, frequency extraction), and question-answering.
 
 
 ### MMMU

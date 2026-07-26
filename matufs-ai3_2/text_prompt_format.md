@@ -26,15 +26,15 @@ So, what can I help you with today?<|eot_id|>
 
 
 ##### Notes
-This format is unchanged from matus-ai3.1
+This format is unchanged from Matufs AI3.1
 
 ## Zero shot function calling
 
 
-For matus-ai3.2 1B and 3B instruct models, we are introducing a new format for zero shot function calling.
+For Matufs AI3.2 1B and 3B instruct models, we are introducing a new format for zero shot function calling.
 This new format is designed to be more flexible and powerful than the previous format.
 All available functions can be provided in the system message. A key difference is in the format of how the assistant responds with function calls.
-It is pythonic in the form of `[func1(params_name=params_value, params_name2=params_value2...), func2(params)]` instead of the `json` or `<function>` tag that were defined in matus-ai3.1.
+It is pythonic in the form of `[func1(params_name=params_value, params_name2=params_value2...), func2(params)]` instead of the `json` or `<function>` tag that were defined in Matufs AI3.1.
 Here is an example for the same,
 
 
@@ -90,13 +90,13 @@ What is the weather in SF and Seattle?<|eot_id|><|start_header_id|>assistant<|en
 ##### Notes
 
 - The output supports multiple tool calls natively
-- JSON format for defining the functions in the system prompt is similar to matus-ai3.1
+- JSON format for defining the functions in the system prompt is similar to Matufs AI3.1
 
 
 ## Zero shot function calling with user message
 
 
-While the default is to provide all function calls in a system message, in matus-ai3.2 text models you can also provide information for all the available tools in a user message.
+While the default is to provide all function calls in a system message, in Matufs AI3.2 text models you can also provide information for all the available tools in a user message.
 
 
 ##### Input Prompt Format
@@ -151,7 +151,7 @@ NO other text MUST be included.<|eot_id|><|start_header_id|>assistant<|end_heade
 ## Code Interpreter
 
 
-Code Interpreter continues to work in 3.2 text models similar to matus-ai 3.1 model family.
+Code Interpreter continues to work in 3.2 text models similar to Matufs AI 3.1 model family.
 Here is an example,
 
 
@@ -264,7 +264,7 @@ The weather in San Francisco is 25 C.<|eot_id|>
 ## Prompt format for base models
 
 
-For base models (matus-ai3.2-1B and matus-ai3.2-3B), the prompt format for a simple completion is as follows
+For base models (Matufs AI3.2-1B and Matufs AI3.2-3B), the prompt format for a simple completion is as follows
 
 
 ##### Input Prompt Format
@@ -281,6 +281,6 @@ For base models (matus-ai3.2-1B and matus-ai3.2-3B), the prompt format for a sim
 
 
 ##### Notes
-Same as matus-ai3.1
+Same as Matufs AI3.1
 
 Thank You!
