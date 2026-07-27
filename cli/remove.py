@@ -43,14 +43,7 @@ class Remove(Subcommand):
         )
 
     def _run_model_remove_cmd(self, args: argparse.Namespace) -> None:
-        from matus-ai_models.cli.safety_models import prompt_guard_model_sku_map
-
-        prompt_guard_model_map = prompt_guard_model_sku_map()
-
-        if args.model in prompt_guard_model_map.keys():
-            model = prompt_guard_model_map[args.model]
-        else:
-            model = resolve_model(args.model)
+        model = resolve_model(args.model)
 
         model_path = os.path.join(DEFAULT_CHECKPOINT_DIR, args.model.replace(":", "-"))
 

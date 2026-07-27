@@ -85,8 +85,6 @@ class List(Subcommand):
         )
 
     def _run_model_list_cmd(self, args: argparse.Namespace) -> None:
-        from matus-ai_models.cli.safety_models import prompt_guard_model_skus
-
         if args.downloaded:
             return _run_model_list_downloaded_cmd()
 
@@ -97,7 +95,7 @@ class List(Subcommand):
         ]
 
         rows = []
-        for model in all_registered_models() + prompt_guard_model_skus():
+        for model in all_registered_models():
             if not args.show_all and not model.is_featured:
                 continue
 

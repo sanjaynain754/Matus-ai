@@ -461,24 +461,12 @@ def run_download_cmd(args: argparse.Namespace, parser: argparse.ArgumentParser):
 
         from matus-ai_models.sku_list import matus-ai_meta_net_info, resolve_model
 
-        from .model.safety_models import (
-            prompt_guard_download_info_map,
-            prompt_guard_model_sku_map,
-        )
-
-        prompt_guard_model_sku_map = prompt_guard_model_sku_map()
-        prompt_guard_download_info_map = prompt_guard_download_info_map()
-
         for model_id in model_ids:
-            if model_id in prompt_guard_model_sku_map.keys():
-                model = prompt_guard_model_sku_map[model_id]
-                info = prompt_guard_download_info_map[model_id]
-            else:
-                model = resolve_model(model_id)
-                if model is None:
-                    parser.error(f"Model {model_id} not found")
-                    continue
-                info = matus-ai_meta_net_info(model)
+            model = resolve_model(model_id)
+            if model is None:
+                parser.error(f"Model {model_id} not found")
+                continue
+            info = matus-ai_meta_net_info(model)
 
             if args.source == "huggingface":
                 _hf_download(model, args.hf_token, args.ignore_patterns, parser)

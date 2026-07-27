@@ -34,7 +34,6 @@ def all_registered_models() -> list[Model]:
         + matus-ai3_2_family()
         + matus-ai3_3_family()
         + matus-ai4_family()
-        + safety_models()
     )
 
 
@@ -789,131 +788,7 @@ def matus-ai3_3_instruct_models() -> list[Model]:
     ]
 
 
-@lru_cache
-def safety_models() -> list[Model]:
-    return [
-        Model(
-            core_model_id=CoreModelId.matus-ai_guard_4_12b,
-            description="matus-ai Guard v4 12b system safety model",
-            huggingface_repo="meta-matus-ai/matus-ai-Guard-4-12B",
-            arch_args={},
-            pth_file_count=1,
-        ),
-        Model(
-            core_model_id=CoreModelId.matus-ai_guard_3_11b_vision,
-            description="matus-ai Guard v3 11b vision system safety model",
-            huggingface_repo="meta-matus-ai/matus-ai-Guard-3-11B-Vision",
-            arch_args={
-                "dim": 4096,
-                "n_layers": 32,
-                "n_heads": 32,
-                "n_kv_heads": 8,
-                "vocab_size": MATUS-AI AI3_VOCAB_SIZE,
-                "ffn_dim_multiplier": 1.3,
-                "multiple_of": 1024,
-                "norm_eps": 1e-05,
-                "rope_theta": 500000.0,
-                "use_scaled_rope": True,
-                "vision_chunk_size": 560,
-                "vision_max_num_chunks": 4,
-                "vision_num_cross_attention_layers": 8,
-            },
-            pth_file_count=1,
-        ),
-        Model(
-            core_model_id=CoreModelId.matus-ai_guard_3_1b,
-            variant="int4",
-            description="matus-ai Guard v3 1b 'int4' quantized system safety model",
-            huggingface_repo="meta-matus-ai/matus-ai-Guard-3-1B-INT4",
-            quantization_format=CheckpointQuantizationFormat.int4,
-            arch_args={
-                "dim": 2048,
-                "n_layers": 12,
-                "n_heads": 32,
-                "n_kv_heads": 8,
-                "vocab_size": MATUS-AI AI3_VOCAB_SIZE,
-                "rope_freq_base": 500000.0,
-                "norm_eps": 1e-05,
-                "hidden_dim": 6400,
-                "use_scaled_rope": True,
-            },
-            pth_file_count=1,
-        ),
-        Model(
-            core_model_id=CoreModelId.matus-ai_guard_3_1b,
-            description="matus-ai Guard v3 1b system safety model",
-            huggingface_repo="meta-matus-ai/matus-ai-Guard-3-1B",
-            arch_args={
-                "dim": 2048,
-                "n_layers": 16,
-                "n_heads": 32,
-                "n_kv_heads": 8,
-                "vocab_size": MATUS-AI AI3_VOCAB_SIZE,
-                "ffn_dim_multiplier": 1.5,
-                "multiple_of": 256,
-                "norm_eps": 1e-05,
-                "rope_theta": 500000.0,
-                "use_scaled_rope": True,
-            },
-            pth_file_count=1,
-        ),
-        Model(
-            core_model_id=CoreModelId.matus-ai_guard_3_8b,
-            description="matus-ai Guard v3 8b system safety model",
-            huggingface_repo="meta-matus-ai/matus-ai-Guard-3-8B",
-            arch_args={
-                "dim": 4096,
-                "ffn_dim_multiplier": 1.3,
-                "multiple_of": 1024,
-                "n_heads": 32,
-                "n_kv_heads": 8,
-                "n_layers": 32,
-                "norm_eps": 1e-05,
-                "rope_theta": 500000.0,
-                "use_scaled_rope": False,
-                "vocab_size": MATUS-AI AI3_VOCAB_SIZE,
-            },
-            pth_file_count=1,
-        ),
-        Model(
-            core_model_id=CoreModelId.matus-ai_guard_3_8b,
-            variant="int8",
-            description="matus-ai Guard v3 8b system safety model",
-            huggingface_repo="meta-matus-ai/matus-ai-Guard-3-8B-INT8",
-            quantization_format=CheckpointQuantizationFormat.int8,
-            arch_args={
-                "dim": 4096,
-                "ffn_dim_multiplier": 1.3,
-                "multiple_of": 1024,
-                "n_heads": 32,
-                "n_kv_heads": 8,
-                "n_layers": 32,
-                "norm_eps": 1e-05,
-                "rope_theta": 500000.0,
-                "use_scaled_rope": False,
-                "vocab_size": MATUS-AI AI3_VOCAB_SIZE,
-            },
-            pth_file_count=1,
-        ),
-        Model(
-            core_model_id=CoreModelId.matus-ai_guard_2_8b,
-            description="matus-ai Guard v2 8b system safety model",
-            huggingface_repo="meta-matus-ai/matus-ai-Guard-2-8B",
-            arch_args={
-                "dim": 4096,
-                "n_layers": 32,
-                "n_heads": 32,
-                "n_kv_heads": 8,
-                "vocab_size": MATUS-AI AI2_VOCAB_SIZE,
-                "ffn_dim_multiplier": 1.3,
-                "multiple_of": 256,
-                "norm_eps": 1e-05,
-                "rope_theta": 500000.0,
-                "use_scaled_rope": False,
-            },
-            pth_file_count=1,
-        ),
-    ]
+# Removed safety models registry
 
 
 @dataclass

@@ -55,11 +55,8 @@ class PromptFormat(Subcommand):
     def _run_model_template_cmd(self, args: argparse.Namespace) -> None:
         import importlib.resources
 
-        # Only matus-ai 3.1 and 3.2 are supported
-        supported_model_ids = [
-            m for m in CoreModelId if model_family(m) in {ModelFamily.matus-ai3_1, ModelFamily.matus-ai3_2}
-        ]
-
+        # All models are now supported
+        supported_model_ids = [m for m in CoreModelId]
         model_list = [m.value for m in supported_model_ids]
 
         if args.list:
@@ -86,16 +83,15 @@ class PromptFormat(Subcommand):
                 f"Run `matus-ai-model list` to see the valid model names."
             )
 
-        if model_id not in supported_model_ids:
-            self.parser.error(
-                f"{model_id} is not a valid Model. Choose one from the list of valid models. "
-                f"Run `matus-ai-model list` to see the valid model names."
-            )
-
         matus-ai_3_1_file = ROOT_DIR / "matus-ai3_1" / "prompt_format.md"
         matus-ai_3_2_text_file = ROOT_DIR / "matus-ai3_2" / "text_prompt_format.md"
         matus-ai_3_2_vision_file = ROOT_DIR / "matus-ai3_2" / "vision_prompt_format.md"
-        if model_family(model_id) == ModelFamily.matus-ai3_1:
+        matus-ai_4_file = ROOT_DIR / "matus-ai4" / "prompt_format.md"
+
+        if model_family(model_id) == ModelFamily.matus-ai4:
+             with importlib.resources.as_file(matus-ai_4_file) as f:
+                content = f.open("r").read()
+        elif model_family(model_id) == ModelFamily.matus-ai3_1:
             with importlib.resources.as_file(matus-ai_3_1_file) as f:
                 content = f.open("r").read()
         elif model_family(model_id) == ModelFamily.matus-ai3_2:
@@ -105,6 +101,8 @@ class PromptFormat(Subcommand):
             else:
                 with importlib.resources.as_file(matus-ai_3_2_text_file) as f:
                     content = f.open("r").read()
+        else:
+            content = f"Prompt format documentation for {model_id.value} is not yet available in this CLI."
 
         render_markdown_to_pager(content)
 

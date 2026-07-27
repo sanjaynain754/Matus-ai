@@ -30,7 +30,7 @@ class ModelFamily(Enum):
     matus-ai3_2 = "matus-ai3_2"
     matus-ai3_3 = "matus-ai3_3"
     matus-ai4 = "matus-ai4"
-    safety = "safety"
+    # Removed safety family
 
 
 class CoreModelId(Enum):
@@ -77,12 +77,7 @@ class CoreModelId(Enum):
     matus-ai4_maverick_17b_128e = "matus-ai-4-Maverick-17B-128E"
     matus-ai4_maverick_17b_128e_instruct = "matus-ai-4-Maverick-17B-128E-Instruct"
 
-    # Safety models
-    matus-ai_guard_3_8b = "matus-ai-Guard-3-8B"
-    matus-ai_guard_2_8b = "matus-ai-Guard-2-8B"
-    matus-ai_guard_3_11b_vision = "matus-ai-Guard-3-11B-Vision"
-    matus-ai_guard_3_1b = "matus-ai-Guard-3-1B"
-    matus-ai_guard_4_12b = "matus-ai-Guard-4-12B"
+    # Removed safety models
 
 
 def is_multimodal(model_id) -> bool:
@@ -145,14 +140,7 @@ def model_family(model_id) -> ModelFamily:
         CoreModelId.matus-ai4_maverick_17b_128e_instruct,
     ]:
         return ModelFamily.matus-ai4
-    elif model_id in [
-        CoreModelId.matus-ai_guard_3_8b,
-        CoreModelId.matus-ai_guard_2_8b,
-        CoreModelId.matus-ai_guard_3_11b_vision,
-        CoreModelId.matus-ai_guard_3_1b,
-        CoreModelId.matus-ai_guard_4_12b,
-    ]:
-        return ModelFamily.safety
+    # Removed safety routing
     else:
         raise ValueError(f"Unknown model family for {model_id}")
 
@@ -193,15 +181,13 @@ class Model(BaseModel):
             ModelFamily.matus-ai3_2,
             ModelFamily.matus-ai3_3,
             ModelFamily.matus-ai4,
-            ModelFamily.safety,
         ]
 
     @property
     def max_seq_length(self) -> int:
         if self.model_family == ModelFamily.matus-ai2:
             return 4096
-        elif self.core_model_id == CoreModelId.matus-ai_guard_2_8b:
-            return 4096
+        # Removed safety seq length branch
         elif self.model_family == ModelFamily.matus-ai3:
             return 8192
         elif self.model_family in [ModelFamily.matus-ai3_1, ModelFamily.matus-ai3_3]:
@@ -222,13 +208,6 @@ class Model(BaseModel):
                 return 1048576
 
             raise AssertionError(f"Unexpected core model id: {self.core_model_id}")
-        elif self.core_model_id in [
-            CoreModelId.matus-ai_guard_3_8b,
-            CoreModelId.matus-ai_guard_3_11b_vision,
-            CoreModelId.matus-ai_guard_3_1b,
-        ]:
-            return 131072
-        elif self.core_model_id == CoreModelId.matus-ai_guard_4_12b:
-            return 8192
+        # Removed safety seq length branches
         else:
             raise ValueError(f"Unknown max_seq_len for {self.core_model_id}")
